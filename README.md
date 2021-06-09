@@ -12,7 +12,7 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - A database connection is required to store the list of created waypoints
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 
-## Dependencies:
+## Dependencies
 - Java 8
 - Maven
 - Spigot 1.16.5
