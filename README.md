@@ -20,8 +20,7 @@ Dependencies can be found in the `pom.xml`.
 - [Project Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for mode/data objects
 
 ## Compilation
-- Compilation is handled by Maven using this command:
-  > mvn clean-install
+- Compilation is handled by Maven using this command: `mvn clean install`
 - Once successfully compiled, the jar file can be found in the `/target/` folder.
 
 
