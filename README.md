@@ -6,8 +6,7 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Waypoints can be created using any Sign, with the following conditions:
     - The first line of text should be `[Waypoint]`
     - The second line of text should be the unique name to be given to the waypoint (ex. Home)
-    - Right-click on the newly created waypoint using a compass to activate it.
-    - Activated waypoints have their first lines colored green
+    - Left-click on the newly created waypoint while holding a compass to activate it
 - Right-clicking on an activated waypoint brings up a menu in which you can select another existing waypoint to fast travel to.
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
