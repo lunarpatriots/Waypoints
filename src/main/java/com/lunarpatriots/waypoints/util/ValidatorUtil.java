@@ -2,10 +2,14 @@ package com.lunarpatriots.waypoints.util;
 
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +29,11 @@ public class ValidatorUtil {
     }
 
 
-    public static boolean validateTriggeredWaypoint(final Action eventAction, final Block targetBlock) {
-        return Action.LEFT_CLICK_BLOCK == eventAction
+    public static boolean validateTriggeredWaypoint(final PlayerInteractEvent event, final Block targetBlock) {
+        return Action.RIGHT_CLICK_BLOCK == event.getAction()
             && Optional.ofNullable(targetBlock).isPresent()
-            && Tag.SIGNS.isTagged(targetBlock.getType());
+            && Tag.SIGNS.isTagged(targetBlock.getType())
+            && event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DIAMOND);
     }
 
     public static void validateInteractedWaypoint(final WaypointRepository repository,
@@ -64,7 +69,21 @@ public class ValidatorUtil {
             waypointInput.setUuid(UUID.randomUUID().toString());
             repository.saveWaypoint(waypointInput);
         }
+    }
 
-        LogUtil.info(waypointInput.toString());
+    public static int computeFastTravelPenalty(final Player player,
+                                               final double costPerBlock,
+                                               final int minBlockDistance,
+                                               final Location destination) {
+        final Location playerLocation = player.getLocation();
+        final int distance = (int) Math.round(playerLocation.distance(destination));
+
+        LogUtil.info("Distance to travel: " + distance);
+
+        if (distance > minBlockDistance) {
+            LogUtil.info("Penalty: " + (distance - minBlockDistance) * costPerBlock);
+        }
+
+        return (int) Math.round(distance <= minBlockDistance ? 0 : (distance - minBlockDistance) * costPerBlock);
     }
 }

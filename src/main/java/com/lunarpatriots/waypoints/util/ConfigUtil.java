@@ -23,4 +23,10 @@ public class ConfigUtil {
 
         return config.getString(key);
     }
+
+    public static double getDouble(final Waypoints plugin, final String key) {
+        final FileConfiguration config = plugin.getConfig();
+
+        return config.getDouble(key);
+    }
 }
