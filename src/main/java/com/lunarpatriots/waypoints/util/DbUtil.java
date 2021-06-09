@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.util;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.constants.Constants;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class DbUtil {
     private DbUtil() {
     }
 
-    public static Connection createConnection(final Waypoints plugin)
+    public static Connection createConnection(final MainApp plugin)
             throws SQLException, ClassNotFoundException {
         try {
             Class.forName(Constants.JDBC_DRIVER);

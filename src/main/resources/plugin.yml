@@ -1,4 +1,4 @@
-main: com.lunarpatriots.waypoints.Waypoints
+main: com.lunarpatriots.waypoints.MainApp
 name: Waypoints
 version: ${project.version}
 author: lunarpatriots

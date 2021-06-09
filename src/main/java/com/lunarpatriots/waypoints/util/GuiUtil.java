@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.util;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,19 +23,11 @@ public class GuiUtil {
     private GuiUtil() {
     }
 
-    public static Inventory initWaypointSelector(final Waypoints plugin,
+    public static Inventory initWaypointSelector(final MainApp plugin,
                                                  final List<Waypoint> waypoints,
                                                  final Player player) {
-        LogUtil.info("Initializing waypoint selection gui");
         final int size = waypoints.size();
-
-        final int inventorySize;
-
-        if (size % 9 == 0) {
-            inventorySize = size;
-        } else {
-            inventorySize = 9 * (size / 9 + 1);
-        }
+        final int inventorySize = size % 9 == 0 ? size : 9 * (size / 9 + 1);
 
         final Inventory selectionGui = Bukkit.createInventory(
             player,
@@ -51,7 +43,7 @@ public class GuiUtil {
 
     private static ItemStack createWaypointSelection(final Waypoint waypoint,
                                                      final Player player,
-                                                     final Waypoints plugin) {
+                                                     final MainApp plugin) {
         final ItemStack selection = new ItemStack(Material.WARPED_SIGN);
         final Double costPerBlock = ConfigUtil.getDouble(plugin, "exp-per-block");
         final int minDistance = ConfigUtil.getInt(plugin, "min-distance");
@@ -66,10 +58,20 @@ public class GuiUtil {
         meta.add(ChatColor.GRAY + "y: " + waypoint.getY());
         meta.add(ChatColor.GRAY + "z: " + waypoint.getZ());
         meta.add(ChatColor.GREEN + "cost: "
-            + ValidatorUtil.computeFastTravelPenalty(player, costPerBlock, minDistance, location) + " exp");
+            + computeFastTravelCost(player, costPerBlock, minDistance, location) + " exp");
         itemDetails.setLore(meta);
         selection.setItemMeta(itemDetails);
 
         return selection;
+    }
+
+    private static int computeFastTravelCost(final Player player,
+                                             final double costPerBlock,
+                                             final int minBlockDistance,
+                                             final Location destination) {
+        final Location playerLocation = player.getLocation();
+        final int distance = (int) Math.round(playerLocation.distance(destination));
+
+        return (int) Math.round(distance <= minBlockDistance ? 0 : (distance - minBlockDistance) * costPerBlock);
     }
 }

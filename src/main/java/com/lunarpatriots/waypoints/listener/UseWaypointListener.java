@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
@@ -23,13 +23,13 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class PlayerInteraction implements Listener {
+public class UseWaypointListener implements Listener {
 
     private final WaypointRepository repository;
     private final String waypointSignPrefix;
-    private final Waypoints plugin;
+    private final MainApp plugin;
 
-    public PlayerInteraction(final Waypoints plugin) {
+    public UseWaypointListener(final MainApp plugin) {
         this.repository = new WaypointRepository(plugin);
         this.plugin = plugin;
         this.waypointSignPrefix = String.format(
@@ -46,12 +46,13 @@ public class PlayerInteraction implements Listener {
 
             if (ValidatorUtil.validateWaypointPrefix(sign, waypointSignPrefix)) {
                 try {
-                    final List<Waypoint> waypoints = repository.getWaypoints();
+                    final List<Waypoint> waypoints = repository.getWaypoints(player.getWorld().getName());
                     final String waypointName = sign.getLine(1);
 
                     ValidatorUtil.validateInteractedWaypoint(
                         repository,
                         waypoints,
+                        player.getWorld().getName(),
                         waypointName,
                         sign.getX(),
                         sign.getY(),
@@ -72,7 +73,7 @@ public class PlayerInteraction implements Listener {
             final Inventory waypointSelector = GuiUtil.initWaypointSelector(plugin, waypoints, player);
             player.openInventory(waypointSelector);
         } else {
-            player.sendMessage(ChatColor.RED + "No other waypoints registered!");
+            player.sendMessage(ChatColor.RED + "No other waypoints found in region!");
         }
     }
 }
