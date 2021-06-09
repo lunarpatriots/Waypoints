@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import java.util.logging.Level;
 
 /**
- * Created By: tristan.hamili@novare.com.hk
+ * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
 public class LogUtil {

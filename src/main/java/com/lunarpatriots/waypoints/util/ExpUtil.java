@@ -3,7 +3,7 @@ package com.lunarpatriots.waypoints.util;
 import org.bukkit.entity.Player;
 
 /**
- * Created By: tristan.hamili@novare.com.hk
+ * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
 public class ExpUtil {
