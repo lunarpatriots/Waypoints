@@ -8,9 +8,9 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
     - The second line of text should be the a unique name to be given to the waypoint
 - Right clicking on a created waypoint brings up a menu in which you can select an existing waypoint to fast travel to.
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
-- Database connection is required for storing the list of waypoints
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
 - Exp cost per block and the max distance for free travelling is configurable
+- Database connection is required to handle saving and retrieval of created waypoints
 
 ## Dev Dependencies
 Dependencies can be found in the `pom.xml`.
