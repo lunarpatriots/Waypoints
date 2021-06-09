@@ -15,11 +15,11 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 
 ## Project Dependencies
 Dependencies can be found in the `pom.xml`.
-- [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - high-level, class-based, object-oriented programming language
-- [Maven](https://maven.apache.org/download.cgi) - build automation tool primarily used for Java projects
+- [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - A high-level, class-based, object-oriented programming language
+- [Maven](https://maven.apache.org/download.cgi) - Build automation tool primarily used for Java projects
 - [Spigot 1.16.5](https://www.spigotmc.org/wiki/spigot-maven/) - A Minecraft Server API
 - [MySQL](https://mvnrepository.com/artifact/mysql/mysql-connector-java) - Database connection driver
-- [Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for mode/data objects
+- [Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for model/data objects
 
 ## Compilation
 - Compilation is handled by Maven by running the command `mvn clean install`
