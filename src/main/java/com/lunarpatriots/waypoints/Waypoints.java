@@ -1,7 +1,7 @@
 package com.lunarpatriots.waypoints;
 
 import com.lunarpatriots.waypoints.listener.PlayerInteraction;
-import com.lunarpatriots.waypoints.listener.WaypointSelectInteraction;
+import com.lunarpatriots.waypoints.listener.WaypointGuiInteraction;
 import com.lunarpatriots.waypoints.util.DbUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 /**
- * Created By: tristan.hamili@novare.com.hk
+ * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
 public class Waypoints extends JavaPlugin {
@@ -63,7 +63,7 @@ public class Waypoints extends JavaPlugin {
         LogUtil.info("Registering events...");
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         pluginManager.registerEvents(new PlayerInteraction(this), this);
-        pluginManager.registerEvents(new WaypointSelectInteraction(this), this);
+        pluginManager.registerEvents(new WaypointGuiInteraction(this), this);
     }
 
     private void testDbConnection() throws Exception {
