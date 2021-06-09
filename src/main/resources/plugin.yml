@@ -1,0 +1,5 @@
+main: com.lunarpatriots.waypoints.Waypoints
+name: Waypoints
+version: ${project.version}
+author: lunarpatriots
+api-version: 1.16
