@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.repository;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.util.DbUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
@@ -18,22 +18,24 @@ import java.util.UUID;
  */
 public class WaypointRepository {
 
-    private final Waypoints plugin;
+    private final MainApp plugin;
 
-    public WaypointRepository(Waypoints plugin) {
+    public WaypointRepository(MainApp plugin) {
         this.plugin = plugin;
     }
 
-    public List<Waypoint> getWaypoints() throws Exception {
+    public List<Waypoint> getWaypoints(final String worldName) throws Exception {
         LogUtil.info("Retrieving waypoints...");
         try (final Connection dbCon = DbUtil.createConnection(plugin)) {
-            final PreparedStatement statement = dbCon.prepareStatement("SELECT * FROM waypoints");
+            final PreparedStatement statement = dbCon.prepareStatement("SELECT * FROM waypoints WHERE world = ?");
+            statement.setString(1, worldName);
             final ResultSet resultSet = statement.executeQuery();
 
             final List<Waypoint> waypoints = new ArrayList<>();
             while(resultSet.next()) {
                 final Waypoint waypoint = new Waypoint();
                 waypoint.setUuid(resultSet.getString("uuid"));
+                waypoint.setWorld(resultSet.getString("world"));
                 waypoint.setName(resultSet.getString("name"));
                 waypoint.setX(resultSet.getInt("x_coordinate"));
                 waypoint.setY(resultSet.getInt("y_coordinate"));
@@ -52,12 +54,13 @@ public class WaypointRepository {
         LogUtil.info("Saving waypoint...");
         try (final Connection dbCon = DbUtil.createConnection(plugin)) {
             final PreparedStatement statement = dbCon.prepareStatement(
-                "INSERT INTO waypoints(uuid, name, x_coordinate, y_coordinate, z_coordinate) VALUES (? ,?, ?, ?, ?)");
+                "INSERT INTO waypoints(uuid, name, x_coordinate, y_coordinate, z_coordinate) VALUES (? ,?, ?, ?, ?, ?)");
             statement.setString(1, UUID.randomUUID().toString());
             statement.setString(2, waypoint.getName());
-            statement.setInt(3, waypoint.getX());
-            statement.setInt(4, waypoint.getY());
-            statement.setInt(5, waypoint.getZ());
+            statement.setString(3, waypoint.getWorld());
+            statement.setInt(4, waypoint.getX());
+            statement.setInt(5, waypoint.getY());
+            statement.setInt(6, waypoint.getZ());
 
             statement.execute();
             statement.close();

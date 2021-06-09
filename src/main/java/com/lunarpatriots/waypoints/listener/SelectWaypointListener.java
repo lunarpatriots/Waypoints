@@ -1,16 +1,14 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
-import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,11 +27,11 @@ import java.util.logging.Level;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class WaypointGuiInteraction implements Listener {
+public class SelectWaypointListener implements Listener {
 
-    private final Waypoints plugin;
+    private final MainApp plugin;
 
-    public WaypointGuiInteraction(final Waypoints plugin) {
+    public SelectWaypointListener(final MainApp plugin) {
         this.plugin = plugin;
     }
 
@@ -93,7 +91,6 @@ public class WaypointGuiInteraction implements Listener {
                     ExpUtil.changePlayerExp(player, -waypoint.getCost());
                 }
 
-                player.spawnParticle(Particle.PORTAL, player.getLocation(), 1);
                 player.teleport(targetLocation);
             } else {
                 player.sendMessage(ChatColor.RED + "You do not have enough exp to fast travel to that location!");

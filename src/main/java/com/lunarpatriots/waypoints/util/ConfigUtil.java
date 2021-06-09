@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.util;
 
-import com.lunarpatriots.waypoints.Waypoints;
+import com.lunarpatriots.waypoints.MainApp;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -12,19 +12,19 @@ public class ConfigUtil {
     private ConfigUtil() {
     }
 
-    public static int getInt(final Waypoints plugin, final String key) {
+    public static int getInt(final MainApp plugin, final String key) {
         final FileConfiguration config = plugin.getConfig();
 
         return config.getInt(key);
     }
 
-    public static String getString(final Waypoints plugin, final String key) {
+    public static String getString(final MainApp plugin, final String key) {
         final FileConfiguration config = plugin.getConfig();
 
         return config.getString(key);
     }
 
-    public static double getDouble(final Waypoints plugin, final String key) {
+    public static double getDouble(final MainApp plugin, final String key) {
         final FileConfiguration config = plugin.getConfig();
 
         return config.getDouble(key);
