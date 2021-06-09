@@ -13,7 +13,7 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Exp cost per block and the max distance for free travelling is configurable
 - Database connection is required to handle saving and retrieval of created waypoints
 
-## Dev Dependencies
+## Project Dependencies
 Dependencies can be found in the `pom.xml`.
 - [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - high-level, class-based, object-oriented programming language
 - [Maven](https://maven.apache.org/download.cgi) - build automation tool primarily used for Java projects
