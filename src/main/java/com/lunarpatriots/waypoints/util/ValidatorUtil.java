@@ -32,8 +32,7 @@ public class ValidatorUtil {
     public static boolean validateTriggeredWaypoint(final PlayerInteractEvent event, final Block targetBlock) {
         return Action.RIGHT_CLICK_BLOCK == event.getAction()
             && Optional.ofNullable(targetBlock).isPresent()
-            && Tag.SIGNS.isTagged(targetBlock.getType())
-            && event.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DIAMOND);
+            && Tag.SIGNS.isTagged(targetBlock.getType());
     }
 
     public static void validateInteractedWaypoint(final WaypointRepository repository,
