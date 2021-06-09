@@ -54,7 +54,7 @@ public class WaypointRepository {
         LogUtil.info("Saving waypoint...");
         try (final Connection dbCon = DbUtil.createConnection(plugin)) {
             final PreparedStatement statement = dbCon.prepareStatement(
-                "INSERT INTO waypoints(uuid, name, x_coordinate, y_coordinate, z_coordinate) VALUES (? ,?, ?, ?, ?, ?)");
+                "INSERT INTO waypoints(uuid, name, world, x_coordinate, y_coordinate, z_coordinate) VALUES (? ,?, ?, ?, ?, ?)");
             statement.setString(1, UUID.randomUUID().toString());
             statement.setString(2, waypoint.getName());
             statement.setString(3, waypoint.getWorld());

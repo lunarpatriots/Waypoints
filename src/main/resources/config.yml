@@ -5,5 +5,4 @@ database:
 
 exp-per-block: 0.1
 min-distance: 100
-waypoint-prefix: Waypoint
 selector-title: Select Location

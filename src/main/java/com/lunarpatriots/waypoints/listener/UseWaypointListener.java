@@ -1,12 +1,11 @@
 package com.lunarpatriots.waypoints.listener;
 
 import com.lunarpatriots.waypoints.MainApp;
-import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
-import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.GuiUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
+import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -14,10 +13,12 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created By: lunarpatriots@gmail.com
@@ -26,44 +27,36 @@ import java.util.List;
 public class UseWaypointListener implements Listener {
 
     private final WaypointRepository repository;
-    private final String waypointSignPrefix;
     private final MainApp plugin;
 
     public UseWaypointListener(final MainApp plugin) {
         this.repository = new WaypointRepository(plugin);
         this.plugin = plugin;
-        this.waypointSignPrefix = String.format(
-            Constants.WAYPOINT_FORMAT, ConfigUtil.getString(plugin, "waypoint-prefix"));
     }
 
     @EventHandler
-    public void waypointInteraction(final PlayerInteractEvent event) {
-        final Block targetBlock = event.getClickedBlock();
+    public void useWaypoint(final PlayerInteractEvent event) {
         final Player player = event.getPlayer();
+        final Block targetBlock = event.getClickedBlock();
 
-        if (ValidatorUtil.validateTriggeredWaypoint(event, targetBlock)) {
+        if (Action.RIGHT_CLICK_BLOCK == event.getAction()
+            && ValidatorUtil.isValidWaypointBlock(targetBlock)) {
+
             final Sign sign = (Sign) targetBlock.getState();
+            final Waypoint interactedWaypoint = new Waypoint(player.getWorld().getName(), sign);
 
-            if (ValidatorUtil.validateWaypointPrefix(sign, waypointSignPrefix)) {
-                try {
-                    final List<Waypoint> waypoints = repository.getWaypoints(player.getWorld().getName());
-                    final String waypointName = sign.getLine(1);
+            try {
+                final List<Waypoint> waypoints = repository.getWaypoints(interactedWaypoint.getWorld());
 
-                    ValidatorUtil.validateInteractedWaypoint(
-                        repository,
-                        waypoints,
-                        player.getWorld().getName(),
-                        waypointName,
-                        sign.getX(),
-                        sign.getY(),
-                        sign.getZ());
-
-                    waypoints.removeIf(waypoint -> waypointName.equals(waypoint.getName()));
-
+                if (isActivated(waypoints, interactedWaypoint)) {
+                    waypoints.removeIf(waypoint -> interactedWaypoint.getName().equals(waypoint.getName()));
                     openSelectionMenu(waypoints, player);
-                } catch (final Exception ex) {
-                    LogUtil.error(ex.getMessage());
+                } else {
+                    MessageUtil
+                        .error(player, "Waypoint is not yet activated! Actvivate it by left-clicking with a compass.");
                 }
+            } catch (final Exception ex) {
+                LogUtil.error(ex.getMessage());
             }
         }
     }
@@ -75,5 +68,14 @@ public class UseWaypointListener implements Listener {
         } else {
             player.sendMessage(ChatColor.RED + "No other waypoints found in region!");
         }
+    }
+
+    private boolean isActivated(final List<Waypoint> waypoints, final Waypoint interactedWaypoint) {
+        final Optional<Waypoint> existingWaypoint = waypoints.stream()
+            .filter(waypoint -> interactedWaypoint.getName().equals(waypoint.getName())
+                && interactedWaypoint.getLocation().equals(waypoint.getLocation()))
+            .findFirst();
+
+        return existingWaypoint.isPresent();
     }
 }

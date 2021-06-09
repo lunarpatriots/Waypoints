@@ -1,5 +1,6 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
 import com.lunarpatriots.waypoints.listener.UseWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
 import com.lunarpatriots.waypoints.util.DbUtil;
@@ -62,6 +63,7 @@ public class MainApp extends JavaPlugin {
     private void registerEvents() {
         LogUtil.info("Registering events...");
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        pluginManager.registerEvents(new ActivateWaypointListener(this), this);
         pluginManager.registerEvents(new UseWaypointListener(this), this);
         pluginManager.registerEvents(new SelectWaypointListener(this), this);
     }
