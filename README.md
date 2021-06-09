@@ -26,4 +26,4 @@ Dependencies can be found in the `pom.xml`.
 
 
 ## Contributions
-Want to contribute to this project? Please contact 
+Want to contribute to this project? Please email me at [lunarpatriots@gmail.com](mailto:lunarpatriots@gmail.com).
