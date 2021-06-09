@@ -41,7 +41,7 @@ public class PlayerInteraction implements Listener {
         final Block targetBlock = event.getClickedBlock();
         final Player player = event.getPlayer();
 
-        if (ValidatorUtil.validateTriggeredWaypoint(event.getAction(), targetBlock)) {
+        if (ValidatorUtil.validateTriggeredWaypoint(event, targetBlock)) {
             final Sign sign = (Sign) targetBlock.getState();
 
             if (ValidatorUtil.validateWaypointPrefix(sign, waypointSignPrefix)) {

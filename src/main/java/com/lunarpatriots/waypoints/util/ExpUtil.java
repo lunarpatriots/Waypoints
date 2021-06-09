@@ -35,8 +35,8 @@ public class ExpUtil {
 
     // Calculate player's current EXP amount
     public static int getPlayerExp(Player player){
+        final int level = player.getLevel();
         int exp = 0;
-        int level = player.getLevel();
 
         // Get the amount of XP in past levels
         exp += getExpAtLevel(level);
@@ -45,5 +45,21 @@ public class ExpUtil {
         exp += Math.round(getExpToLevelUp(level) * player.getExp());
 
         return exp;
+    }
+
+    public static int changePlayerExp(Player player, int exp) {
+        // Get player's current exp
+        final int currentExp = getPlayerExp(player);
+
+        // Reset player's current exp to 0
+        player.setExp(0);
+        player.setLevel(0);
+
+        // Give the player their exp back, with the difference
+        final int newExp = currentExp + exp;
+        player.giveExp(newExp);
+
+        // Return the player's new exp amount
+        return newExp;
     }
 }

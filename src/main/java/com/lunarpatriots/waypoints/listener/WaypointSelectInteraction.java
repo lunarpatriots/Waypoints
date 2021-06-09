@@ -6,6 +6,7 @@ import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
+import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -68,13 +69,13 @@ public class WaypointSelectInteraction implements Listener {
         waypoint.setX(Integer.parseInt(lore.get(1).split(" ")[1]));
         waypoint.setY(Integer.parseInt(lore.get(2).split(" ")[1]));
         waypoint.setZ(Integer.parseInt(lore.get(3).split(" ")[1]));
+        waypoint.setCost(Integer.parseInt(lore.get(4).split(" ")[1]));
 
         return waypoint;
     }
 
     private void attemptFastTravel(final Player player, final Waypoint waypoint) {
         LogUtil.info("Checking if selected waypoint is available...");
-        final Location playerLocation = player.getLocation();
         final Location targetLocation = new Location(
             player.getWorld(),
             waypoint.getX(),
@@ -84,13 +85,13 @@ public class WaypointSelectInteraction implements Listener {
         final Block targetBlock = targetLocation.getBlock();
 
         if (!targetBlock.isEmpty() && Tag.SIGNS.isTagged(targetBlock.getType())) {
-            final double distance = playerLocation.distance(targetLocation);
-            final int playerExp = ExpUtil.getPlayerExp(player);
-            LogUtil.info("Distance: " + distance);
-            LogUtil.info("Exp: " + playerExp);
-
-            if (playerExp >= distance) {
+            if (ExpUtil.getPlayerExp(player) >= waypoint.getCost()) {
                 player.sendMessage(ChatColor.DARK_GREEN + "Fast travelling to " + waypoint.getName());
+
+                if (waypoint.getCost() > 0) {
+                    ExpUtil.changePlayerExp(player, -waypoint.getCost());
+                }
+
                 player.teleport(targetLocation);
             } else {
                 player.sendMessage(ChatColor.RED + "You do not have enough exp to fast travel to that location!");

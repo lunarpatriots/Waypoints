@@ -3,6 +3,7 @@ database:
   username: 1852
   password: c8035658ec
 
-exp-per-block: 0.01
+exp-per-block: 0.1
+min-distance: 100
 waypoint-prefix: Waypoint
 selector-title: Select Location
