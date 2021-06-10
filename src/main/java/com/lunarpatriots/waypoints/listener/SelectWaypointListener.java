@@ -6,6 +6,8 @@ import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
+import com.lunarpatriots.waypoints.util.MessageUtil;
+import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -74,18 +76,12 @@ public class SelectWaypointListener implements Listener {
     }
 
     private void attemptFastTravel(final Player player, final Waypoint waypoint) {
-        LogUtil.info("Checking if selected waypoint is available...");
-        final Location targetLocation = new Location(
-            player.getWorld(),
-            waypoint.getX(),
-            waypoint.getY(),
-            waypoint.getZ());
-
+        final Location targetLocation = waypoint.getLocation();
         final Block targetBlock = targetLocation.getBlock();
 
-        if (!targetBlock.isEmpty() && Tag.SIGNS.isTagged(targetBlock.getType())) {
+        if (ValidatorUtil.isValidWaypointBlock(targetBlock)) {
             if (ExpUtil.getPlayerExp(player) >= waypoint.getCost()) {
-                player.sendMessage(ChatColor.DARK_GREEN + "Fast travelling to " + waypoint.getName());
+                MessageUtil.success(player, String.format("Fast travelling to %s...", waypoint.getName()));
 
                 if (waypoint.getCost() > 0) {
                     ExpUtil.changePlayerExp(player, -waypoint.getCost());
@@ -93,16 +89,17 @@ public class SelectWaypointListener implements Listener {
 
                 player.teleport(targetLocation);
             } else {
-                player.sendMessage(ChatColor.RED + "You do not have enough exp to fast travel to that location!");
+                MessageUtil.error(player, "You do not have enough exp to fast travel to that location!");
             }
         } else {
+            MessageUtil.error(player, "Fast travel point not found! Removing from list...");
             final WaypointRepository repository = new WaypointRepository(plugin);
-            player.sendMessage(ChatColor.RED + "Fast travel point not found! Removing from list...");
+
 
             try {
                 repository.deleteData(waypoint.getUuid());
             } catch (final Exception ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage());
+                LogUtil.error(ex.getMessage());
             }
         }
     }

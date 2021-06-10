@@ -66,7 +66,7 @@ public class UseWaypointListener implements Listener {
             final Inventory waypointSelector = GuiUtil.initWaypointSelector(plugin, waypoints, player);
             player.openInventory(waypointSelector);
         } else {
-            player.sendMessage(ChatColor.RED + "No other waypoints found in region!");
+            MessageUtil.error(player, "No other waypoints found in region!");
         }
     }
 
