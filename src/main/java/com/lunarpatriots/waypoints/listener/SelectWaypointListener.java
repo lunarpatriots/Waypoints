@@ -8,7 +8,6 @@ import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Tag;
@@ -21,9 +20,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 
 /**
  * Created By: lunarpatriots@gmail.com
@@ -47,35 +44,21 @@ public class SelectWaypointListener implements Listener {
         if (guiName.equalsIgnoreCase(eventGuiName)) {
             event.setCancelled(true);
             final ItemStack selectedWaypoint = event.getCurrentItem();
-            final boolean validateSelection = Optional.ofNullable(selectedWaypoint).isPresent()
-                && Tag.SIGNS.isTagged(selectedWaypoint.getType());
 
-            if (validateSelection) {
+            if (Optional.ofNullable(selectedWaypoint).isPresent()
+                    && Tag.SIGNS.isTagged(selectedWaypoint.getType())) {
+
                 final ItemMeta waypointInfo = selectedWaypoint.getItemMeta();
-                final Waypoint waypoint = retrieveWaypointMeta(waypointInfo);
                 final Player player = (Player) event.getWhoClicked();
-                player.closeInventory();
+                final Waypoint waypoint = new Waypoint(player.getWorld().getName(), waypointInfo);
 
-                attemptFastTravel(player, waypoint);
+                player.closeInventory();
+                teleportPlayer(player, waypoint);
             }
         }
     }
 
-    private Waypoint retrieveWaypointMeta(final ItemMeta info) {
-        final Waypoint waypoint = new Waypoint();
-        waypoint.setName(info.getDisplayName());
-
-        final List<String> lore = info.getLore();
-        waypoint.setUuid(lore.get(0).split(" ")[1]);
-        waypoint.setX(Integer.parseInt(lore.get(1).split(" ")[1]));
-        waypoint.setY(Integer.parseInt(lore.get(2).split(" ")[1]));
-        waypoint.setZ(Integer.parseInt(lore.get(3).split(" ")[1]));
-        waypoint.setCost(Integer.parseInt(lore.get(4).split(" ")[1]));
-
-        return waypoint;
-    }
-
-    private void attemptFastTravel(final Player player, final Waypoint waypoint) {
+    private void teleportPlayer(final Player player, final Waypoint waypoint) {
         final Location targetLocation = waypoint.getLocation();
         final Block targetBlock = targetLocation.getBlock();
 
@@ -94,7 +77,6 @@ public class SelectWaypointListener implements Listener {
         } else {
             MessageUtil.error(player, "Fast travel point not found! Removing from list...");
             final WaypointRepository repository = new WaypointRepository(plugin);
-
 
             try {
                 repository.deleteData(waypoint.getUuid());
