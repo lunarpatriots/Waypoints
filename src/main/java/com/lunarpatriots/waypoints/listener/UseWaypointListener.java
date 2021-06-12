@@ -52,7 +52,7 @@ public class UseWaypointListener implements Listener {
                     openSelectionMenu(waypoints, player);
                 } else {
                     MessageUtil
-                        .error(player, "Waypoint is not yet activated! Actvivate it by left-clicking with a compass.");
+                        .error(player, "Waypoint is not yet activated! Left-click with a compass to activate.");
                 }
             } catch (final Exception ex) {
                 LogUtil.error(ex.getMessage());

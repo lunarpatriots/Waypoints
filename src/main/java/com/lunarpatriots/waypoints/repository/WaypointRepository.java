@@ -1,13 +1,9 @@
 package com.lunarpatriots.waypoints.repository;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.WaypointsUtil;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +33,11 @@ public class WaypointRepository {
             .ifPresent(current -> {
                 final int index = waypoints.indexOf(current);
                 waypoints.set(index, waypoint);
+                WaypointsUtil.data = waypoints;
             });
     }
 
     public void deleteWaypoint(final Waypoint waypoint) {
-        final List<Waypoint> waypoints = WaypointsUtil.data;
-        waypoints.remove(waypoint);
+        WaypointsUtil.data.removeIf(currentWaypoint -> waypoint.getUuid().equals(currentWaypoint.getUuid()));
     }
 }

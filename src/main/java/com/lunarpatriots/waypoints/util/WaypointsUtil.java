@@ -1,6 +1,7 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.model.Waypoint;
@@ -34,8 +35,8 @@ public class WaypointsUtil {
             final WaypointsList list = gson.fromJson(fileReader, WaypointsList.class);
             data = list.getData();
         } catch(final IOException ex) {
-            LogUtil.error(ex.getMessage());
-            throw new DataFileException("Failed to read data file!", ex);
+            LogUtil.error("Failed to read data file");
+            throw new DataFileException(ex.getMessage(), ex);
         }
     }
 
@@ -63,13 +64,21 @@ public class WaypointsUtil {
         final File dataDirectory = new File(baseDirectory, "data");
 
         if (!dataDirectory.exists()) {
-            throw new DataFileException("Data directory not found!");
+            LogUtil.info("Data directory not found! Creating data directory...");
+            dataDirectory.mkdir();
         }
 
         final File dataFile = new File(dataDirectory, "waypoints.json");
 
         if (!dataFile.exists()) {
-            throw new DataFileException("Data file not found!");
+            try {
+                LogUtil.info("Data file not found! Creating data file...");
+                dataFile.createNewFile();
+                saveToFile(plugin);
+            } catch (final IOException ex) {
+                LogUtil.error("Unable to create data file!");
+                throw new DataFileException(ex.getMessage(), ex);
+            }
         }
 
         return dataFile;
