@@ -8,3 +8,6 @@ commands:
   validate:
     description: Checks validity of all waypoints in the currently loaded world
     usage: /validate
+  clean:
+    description: Removes all invalid waypoints
+    usage: /clean

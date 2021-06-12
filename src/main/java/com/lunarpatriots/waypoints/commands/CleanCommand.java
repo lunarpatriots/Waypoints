@@ -10,12 +10,14 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created By: lunarpatriots@gmail.com
- * Date created: 06/12/2021
+ * Date created: 06/13/2021
  */
-public class ValidateCommand implements TabExecutor {
+public class CleanCommand implements TabExecutor {
+
 
     @Override
     public boolean onCommand(final CommandSender commandSender,
@@ -25,16 +27,16 @@ public class ValidateCommand implements TabExecutor {
         final Player player = (Player) commandSender;
 
         final List<Waypoint> waypoints = DataFileUtil.data;
-        final long count = waypoints.stream()
+        final List<Waypoint> validWaypoints = waypoints.stream()
             .filter(waypoint -> ValidatorUtil.isValidWaypointBlock(waypoint.getLocation().getBlock()))
-            .count();
+            .collect(Collectors.toList());
 
-        final String msg = String.format("%s/%s valid waypoints", count, waypoints.size());
-
-        if (count == waypoints.size()) {
-            MessageUtil.success(player, msg);
+        if (validWaypoints.size() < waypoints.size()) {
+            DataFileUtil.data = validWaypoints;
+            final int invalidCount = waypoints.size() - validWaypoints.size();
+            MessageUtil.success(player, String.format("Removed %s invalid waypoints.", invalidCount));
         } else {
-            MessageUtil.fail(player, msg);
+            MessageUtil.fail(player, "No invalid waypoints to remove.");
         }
 
         return true;
@@ -43,7 +45,8 @@ public class ValidateCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender commandSender,
                                       final Command command,
-                                      final String s, final String[] strings) {
+                                      final String s,
+                                      final String[] strings) {
 
         return null;
     }
