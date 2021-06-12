@@ -4,7 +4,7 @@ import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
 import com.lunarpatriots.waypoints.listener.UseWaypointListener;
-import com.lunarpatriots.waypoints.util.WaypointsUtil;
+import com.lunarpatriots.waypoints.util.DataFileUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,7 +36,7 @@ public class MainApp extends JavaPlugin {
     public void onDisable() {
         LogUtil.info("Saving waypoints...");
         try {
-            WaypointsUtil.saveToFile(this);
+            DataFileUtil.saveToFile(this);
         } catch (final Exception ex) {
             LogUtil.error(ex.getMessage());
         }
@@ -67,7 +67,7 @@ public class MainApp extends JavaPlugin {
 
     public void loadDataFile() throws DataFileException {
         LogUtil.info("Loading data file...");
-        WaypointsUtil.loadFromFile(this);
+        DataFileUtil.loadFromFile(this);
     }
 
     private void registerEvents() {

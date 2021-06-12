@@ -1,6 +1,7 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
@@ -20,11 +21,11 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class WaypointsUtil {
+public class DataFileUtil {
 
     public static List<Waypoint> data = new ArrayList<>();
 
-    private WaypointsUtil() {
+    private DataFileUtil() {
     }
 
     public static void loadFromFile(final MainApp plugin) throws DataFileException {
@@ -42,7 +43,7 @@ public class WaypointsUtil {
 
     public static void saveToFile(final MainApp plugin) throws DataFileException {
         final File dataFile = getDataFile(plugin);
-        final Gson gson = new Gson();
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try(final Writer writer = new FileWriter(dataFile)) {
             final WaypointsList list = new WaypointsList();

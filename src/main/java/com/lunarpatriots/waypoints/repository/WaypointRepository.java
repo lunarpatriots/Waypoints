@@ -1,7 +1,7 @@
 package com.lunarpatriots.waypoints.repository;
 
 import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.util.WaypointsUtil;
+import com.lunarpatriots.waypoints.util.DataFileUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class WaypointRepository {
 
     public List<Waypoint> getWaypoints(final String worldName) {
-        final List<Waypoint> waypoints = WaypointsUtil.data;
+        final List<Waypoint> waypoints = DataFileUtil.data;
 
         return waypoints.stream()
             .filter(waypoint -> worldName.equals(waypoint.getWorld()))
@@ -21,11 +21,11 @@ public class WaypointRepository {
     }
 
     public void saveWaypoint(final Waypoint waypoint) {
-        WaypointsUtil.data.add(waypoint);
+        DataFileUtil.data.add(waypoint);
     }
 
     public void updateWaypoint(final Waypoint waypoint) {
-        final List<Waypoint> waypoints = WaypointsUtil.data;
+        final List<Waypoint> waypoints = DataFileUtil.data;
 
         waypoints.stream()
             .filter(current -> waypoint.getUuid().equals(current.getUuid()))
@@ -33,11 +33,11 @@ public class WaypointRepository {
             .ifPresent(current -> {
                 final int index = waypoints.indexOf(current);
                 waypoints.set(index, waypoint);
-                WaypointsUtil.data = waypoints;
+                DataFileUtil.data = waypoints;
             });
     }
 
     public void deleteWaypoint(final Waypoint waypoint) {
-        WaypointsUtil.data.removeIf(currentWaypoint -> waypoint.getUuid().equals(currentWaypoint.getUuid()));
+        DataFileUtil.data.removeIf(currentWaypoint -> waypoint.getUuid().equals(currentWaypoint.getUuid()));
     }
 }
