@@ -1,9 +1,10 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
-import com.lunarpatriots.waypoints.listener.UseWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
-import com.lunarpatriots.waypoints.util.DbUtil;
+import com.lunarpatriots.waypoints.listener.UseWaypointListener;
+import com.lunarpatriots.waypoints.util.WaypointsUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,35 +21,38 @@ public class MainApp extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        loadConfig();
         try {
-            testDbConnection();
+            loadConfig();
+            loadDataFile();
             registerEvents();
         } catch (final Exception ex) {
+            LogUtil.error("An error occurred while loading plugin.");
             LogUtil.error(ex.getMessage());
+            Bukkit.getServer().getPluginManager().disablePlugin(this);
         }
     }
 
     @Override
     public void onDisable() {
+        LogUtil.info("Saving waypoints...");
+        try {
+            WaypointsUtil.saveToFile(this);
+        } catch (final Exception ex) {
+            LogUtil.error(ex.getMessage());
+        }
     }
 
-    private void loadConfig() {
+    private void loadConfig() throws Exception {
         LogUtil.info("Verifying config file...");
         final File directory = getDataFolder();
 
-        try {
-            if (!directory.exists()) {
-                directory.mkdir();
-            }
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
 
-            final File config = new File(directory, "config.yml");
-            if (!config.exists()) {
-                this.saveDefaultConfig();
-            }
-        } catch (final Exception ex) {
-            LogUtil.error("Config directory not found!");
-            throw ex;
+        final File configFile = new File(directory, "config.yml");
+        if (!configFile.exists()) {
+            this.saveDefaultConfig();
         }
 
         final FileConfiguration config = this.getConfig();
@@ -56,20 +60,21 @@ public class MainApp extends JavaPlugin {
         try {
             config.load(new File(directory, "config.yml"));
         } catch (final Exception ex) {
-            LogUtil.error("Unable to load config file!");
+            LogUtil.error("Failed to load config file!");
+            throw ex;
         }
+    }
+
+    public void loadDataFile() throws DataFileException {
+        LogUtil.info("Loading data file...");
+        WaypointsUtil.loadFromFile(this);
     }
 
     private void registerEvents() {
         LogUtil.info("Registering events...");
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new ActivateWaypointListener(this), this);
+        pluginManager.registerEvents(new ActivateWaypointListener(), this);
         pluginManager.registerEvents(new UseWaypointListener(this), this);
         pluginManager.registerEvents(new SelectWaypointListener(this), this);
-    }
-
-    private void testDbConnection() throws Exception {
-        LogUtil.info("Testing database connection...");
-        DbUtil.createConnection(this);
     }
 }

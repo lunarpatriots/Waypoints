@@ -45,7 +45,7 @@ public class GuiUtil {
                                                      final Player player,
                                                      final MainApp plugin) {
         final ItemStack selection = new ItemStack(Material.WARPED_SIGN);
-        final Double costPerBlock = ConfigUtil.getDouble(plugin, "exp-per-block");
+        final double costPerBlock = ConfigUtil.getDouble(plugin, "exp-per-block");
         final int minDistance = ConfigUtil.getInt(plugin, "min-distance");
 
         final ItemMeta itemDetails = selection.getItemMeta();

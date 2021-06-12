@@ -26,12 +26,10 @@ import java.util.UUID;
  */
 public class ActivateWaypointListener implements Listener {
 
-    private final MainApp plugin;
     private WaypointRepository repository;
 
-    public ActivateWaypointListener(final MainApp plugin) {
-        this.plugin = plugin;
-        this.repository = new WaypointRepository(plugin);
+    public ActivateWaypointListener() {
+        this.repository = new WaypointRepository();
     }
 
     @EventHandler
@@ -61,7 +59,7 @@ public class ActivateWaypointListener implements Listener {
             .findFirst();
     }
 
-    private void saveWaypoint(final Waypoint newWaypoint, final Player player) throws Exception {
+    private void saveWaypoint(final Waypoint newWaypoint, final Player player) {
         final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
         final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
 

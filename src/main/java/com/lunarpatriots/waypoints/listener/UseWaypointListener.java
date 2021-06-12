@@ -7,7 +7,6 @@ import com.lunarpatriots.waypoints.util.GuiUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -30,8 +29,8 @@ public class UseWaypointListener implements Listener {
     private final MainApp plugin;
 
     public UseWaypointListener(final MainApp plugin) {
-        this.repository = new WaypointRepository(plugin);
         this.plugin = plugin;
+        this.repository = new WaypointRepository();
     }
 
     @EventHandler

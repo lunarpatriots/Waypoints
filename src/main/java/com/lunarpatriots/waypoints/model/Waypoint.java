@@ -20,18 +20,8 @@ public class Waypoint {
     private int x;
     private int y;
     private int z;
-    private int cost;
 
     public Waypoint(final String name, final String world, final int x, final int y, final int z) {
-        this.name = name;
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    public Waypoint(final String uuid, final String name, final String world, final int x, final int y, final int z) {
-        this.uuid = uuid;
         this.name = name;
         this.world = world;
         this.x = x;
@@ -56,7 +46,6 @@ public class Waypoint {
         this.x = Integer.parseInt(lore.get(1).split(" ")[1]);
         this.y = Integer.parseInt(lore.get(2).split(" ")[1]);
         this.z = Integer.parseInt(lore.get(3).split(" ")[1]);
-        this.cost = Integer.parseInt(lore.get(4).split(" ")[1]);
     }
 
     public Location getLocation() {

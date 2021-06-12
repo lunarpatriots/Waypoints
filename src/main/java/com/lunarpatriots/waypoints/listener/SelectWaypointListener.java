@@ -1,11 +1,10 @@
 package com.lunarpatriots.waypoints.listener;
 
 import com.lunarpatriots.waypoints.MainApp;
-import com.lunarpatriots.waypoints.model.Waypoint;
+import com.lunarpatriots.waypoints.model.dto.WaypointDto;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
-import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
@@ -50,7 +49,7 @@ public class SelectWaypointListener implements Listener {
 
                 final ItemMeta waypointInfo = selectedWaypoint.getItemMeta();
                 final Player player = (Player) event.getWhoClicked();
-                final Waypoint waypoint = new Waypoint(player.getWorld().getName(), waypointInfo);
+                final WaypointDto waypoint = new WaypointDto(player.getWorld().getName(), waypointInfo);
 
                 player.closeInventory();
                 teleportPlayer(player, waypoint);
@@ -58,7 +57,7 @@ public class SelectWaypointListener implements Listener {
         }
     }
 
-    private void teleportPlayer(final Player player, final Waypoint waypoint) {
+    private void teleportPlayer(final Player player, final WaypointDto waypoint) {
         final Location targetLocation = waypoint.getLocation();
         final Block targetBlock = targetLocation.getBlock();
 
@@ -76,13 +75,9 @@ public class SelectWaypointListener implements Listener {
             }
         } else {
             MessageUtil.error(player, "Fast travel point not found! Removing from list...");
-            final WaypointRepository repository = new WaypointRepository(plugin);
+            final WaypointRepository repository = new WaypointRepository();
 
-            try {
-                repository.deleteData(waypoint.getUuid());
-            } catch (final Exception ex) {
-                LogUtil.error(ex.getMessage());
-            }
+            repository.deleteWaypoint(waypoint);
         }
     }
 }
