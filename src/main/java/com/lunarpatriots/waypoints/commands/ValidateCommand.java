@@ -23,8 +23,8 @@ public class ValidateCommand implements TabExecutor {
         final WaypointRepository repository = new WaypointRepository();
         final Player player = (Player) commandSender;
 
-        final List<Waypoint> waypoints = repository.getWaypoints(player.getWorld().getName());
-        final long count = DataFileUtil.data.stream()
+        final List<Waypoint> waypoints = DataFileUtil.data;
+        final long count = waypoints.stream()
             .filter(waypoint -> ValidatorUtil.isValidWaypointBlock(waypoint.getLocation().getBlock()))
             .count();
 
