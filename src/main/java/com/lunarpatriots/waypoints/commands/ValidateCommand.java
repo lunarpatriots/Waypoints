@@ -1,7 +1,6 @@
 package com.lunarpatriots.waypoints.commands;
 
 import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.DataFileUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
@@ -20,7 +19,6 @@ public class ValidateCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(final CommandSender commandSender, final Command command, final String s, final String[] strings) {
-        final WaypointRepository repository = new WaypointRepository();
         final Player player = (Player) commandSender;
 
         final List<Waypoint> waypoints = DataFileUtil.data;
