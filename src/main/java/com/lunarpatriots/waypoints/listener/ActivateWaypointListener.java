@@ -61,9 +61,11 @@ public class ActivateWaypointListener implements Listener {
             final Block duplicateBlock = duplicateWaypoint.getLocation().getBlock();
 
             if (ValidatorUtil.isValidWaypointBlock(duplicateBlock)) {
-                final String msg = ValidatorUtil.isValidWaypointBlock(duplicateBlock)
+                final String msg = duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())
                     ? "Waypoint already activated!"
-                    : String.format("%s already exists! Please set a different waypoint name.", newWaypoint.getName());
+                    : String.format(
+                        "A waypoint with the name %s already exists! Please set a different waypoint name.",
+                        newWaypoint.getName());
 
                 MessageUtil.fail(player, msg);
             } else {
