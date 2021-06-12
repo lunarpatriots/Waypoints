@@ -1,5 +1,6 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.commands.CleanCommand;
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
@@ -83,6 +84,6 @@ public class MainApp extends JavaPlugin {
     private void registerCommands() {
         LogUtil.info("Registering commands...");
         this.getCommand("validate").setExecutor(new ValidateCommand());
-        this.getCommand("clean").setExecutor(new ValidateCommand());
+        this.getCommand("clean").setExecutor(new CleanCommand());
     }
 }
