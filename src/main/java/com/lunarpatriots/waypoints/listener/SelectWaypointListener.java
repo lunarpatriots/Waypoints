@@ -5,7 +5,6 @@ import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
-import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
@@ -20,6 +19,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -50,39 +50,39 @@ public class SelectWaypointListener implements Listener {
 
                 final ItemMeta waypointInfo = selectedWaypoint.getItemMeta();
                 final Player player = (Player) event.getWhoClicked();
+
+                assert Optional.ofNullable(waypointInfo).isPresent();
+
                 final Waypoint waypoint = new Waypoint(player.getWorld().getName(), waypointInfo);
+                final int cost = Integer.parseInt(Objects.requireNonNull(waypointInfo.getLore())
+                    .get(4).split(" ")[1]);
 
                 player.closeInventory();
-                teleportPlayer(player, waypoint);
+                teleportPlayer(player, waypoint, cost);
             }
         }
     }
 
-    private void teleportPlayer(final Player player, final Waypoint waypoint) {
+    private void teleportPlayer(final Player player, final Waypoint waypoint, final int cost) {
         final Location targetLocation = waypoint.getLocation();
         final Block targetBlock = targetLocation.getBlock();
 
         if (ValidatorUtil.isValidWaypointBlock(targetBlock)) {
-            if (ExpUtil.getPlayerExp(player) >= waypoint.getCost()) {
+            if (ExpUtil.getPlayerExp(player) >= cost) {
                 MessageUtil.success(player, String.format("Fast travelling to %s...", waypoint.getName()));
 
-                if (waypoint.getCost() > 0) {
-                    ExpUtil.changePlayerExp(player, -waypoint.getCost());
+                if (cost > 0) {
+                    ExpUtil.changePlayerExp(player, -cost);
                 }
 
                 player.teleport(targetLocation);
             } else {
-                MessageUtil.error(player, "You do not have enough exp to fast travel to that location!");
+                MessageUtil.fail(player, "You do not have enough exp to fast travel to that location!");
             }
         } else {
-            MessageUtil.error(player, "Fast travel point not found! Removing from list...");
-            final WaypointRepository repository = new WaypointRepository(plugin);
-
-            try {
-                repository.deleteData(waypoint.getUuid());
-            } catch (final Exception ex) {
-                LogUtil.error(ex.getMessage());
-            }
+            MessageUtil.fail(player, "Fast travel point not found! Removing from list...");
+            final WaypointRepository repository = new WaypointRepository();
+            repository.deleteWaypoint(waypoint);
         }
     }
 }

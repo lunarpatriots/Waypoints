@@ -1,6 +1,5 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.LogUtil;
@@ -26,12 +25,10 @@ import java.util.UUID;
  */
 public class ActivateWaypointListener implements Listener {
 
-    private final MainApp plugin;
     private WaypointRepository repository;
 
-    public ActivateWaypointListener(final MainApp plugin) {
-        this.plugin = plugin;
-        this.repository = new WaypointRepository(plugin);
+    public ActivateWaypointListener() {
+        this.repository = new WaypointRepository();
     }
 
     @EventHandler
@@ -61,7 +58,7 @@ public class ActivateWaypointListener implements Listener {
             .findFirst();
     }
 
-    private void saveWaypoint(final Waypoint newWaypoint, final Player player) throws Exception {
+    private void saveWaypoint(final Waypoint newWaypoint, final Player player) {
         final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
         final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
 
@@ -71,9 +68,9 @@ public class ActivateWaypointListener implements Listener {
             if (ValidatorUtil.isValidWaypointBlock(duplicateWaypoint.getLocation().getBlock())) {
 
                 if (duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())) {
-                    MessageUtil.error(player, "Waypoint already activated!");
+                    MessageUtil.fail(player, "Waypoint already activated!");
                 } else {
-                    MessageUtil.error(player, "Duplicate waypoint name!");
+                    MessageUtil.fail(player, "Duplicate waypoint name!");
                 }
             } else {
                 newWaypoint.setUuid(duplicateWaypoint.getUuid());

@@ -11,14 +11,12 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
 - Exp cost per block and the max distance for free travelling is configurable
-- Database connection is required to handle saving and retrieval of created waypoints
 
 ## Project Dependencies
 Dependencies can be found in the `pom.xml`.
 - [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - A high-level, class-based, object-oriented programming language
 - [Maven](https://maven.apache.org/download.cgi) - Build automation tool primarily used for Java projects
 - [Spigot 1.16.5](https://www.spigotmc.org/wiki/spigot-maven/) - A Minecraft Server API
-- [MySQL](https://mvnrepository.com/artifact/mysql/mysql-connector-java) - Database connection driver
 - [Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for model/data objects
 
 ## Compilation

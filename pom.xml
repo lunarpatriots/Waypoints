@@ -7,7 +7,7 @@
     <groupId>com.lunarpatriots</groupId>
     <artifactId>waypoints</artifactId>
     <name>Waypoints</name>
-    <version>0.3</version>
+    <version>0.4</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -32,23 +32,21 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.15</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.0</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>waypoints</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -62,13 +60,8 @@
         </plugins>
         <resources>
             <resource>
-                <targetPath>.</targetPath>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
-                </includes>
             </resource>
         </resources>
     </build>

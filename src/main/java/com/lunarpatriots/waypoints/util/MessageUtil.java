@@ -16,7 +16,7 @@ public class MessageUtil {
         player.sendMessage(ChatColor.GREEN + message);
     }
 
-    public static void error(final Player player, final String message) {
+    public static void fail(final Player player, final String message) {
         player.sendMessage(ChatColor.RED + message);
     }
 }
