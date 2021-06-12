@@ -29,13 +29,12 @@ public class WaypointRepository {
     public void updateWaypoint(final Waypoint waypoint) {
         final List<Waypoint> waypoints = DataFileUtil.data;
 
-        waypoints.stream()
+        DataFileUtil.data.stream()
             .filter(current -> waypoint.getUuid().equals(current.getUuid()))
             .findFirst()
             .ifPresent(current -> {
                 final int index = waypoints.indexOf(current);
-                waypoints.set(index, waypoint);
-                DataFileUtil.data = waypoints;
+                DataFileUtil.data.set(index, waypoint);
             });
     }
 

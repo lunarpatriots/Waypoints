@@ -52,34 +52,36 @@ public class ActivateWaypointListener implements Listener {
         }
     }
 
-    private Optional<Waypoint> retrieveDuplicate(final List<Waypoint> waypoints, final String name) {
-        return waypoints.stream()
-            .filter(waypoint -> waypoint.getName().equals(name))
-            .findFirst();
-    }
-
     private void saveWaypoint(final Waypoint newWaypoint, final Player player) {
         final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
         final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
 
         if (duplicate.isPresent()) {
             final Waypoint duplicateWaypoint = duplicate.get();
+            final Block duplicateBlock = duplicateWaypoint.getLocation().getBlock();
 
-            if (ValidatorUtil.isValidWaypointBlock(duplicateWaypoint.getLocation().getBlock())) {
+            if (ValidatorUtil.isValidWaypointBlock(duplicateBlock)) {
+                final String msg = ValidatorUtil.isValidWaypointBlock(duplicateBlock)
+                    ? "Waypoint already activated!"
+                    : String.format("%s already exists! Please set a different waypoint name.", newWaypoint.getName());
 
-                if (duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())) {
-                    MessageUtil.fail(player, "Waypoint already activated!");
-                } else {
-                    MessageUtil.fail(player, "Duplicate waypoint name!");
-                }
+                MessageUtil.fail(player, msg);
             } else {
                 newWaypoint.setUuid(duplicateWaypoint.getUuid());
                 repository.updateWaypoint(newWaypoint);
+                MessageUtil.success(player, "New waypoint activated!");
             }
         } else {
             newWaypoint.setUuid(UUID.randomUUID().toString());
             repository.saveWaypoint(newWaypoint);
             MessageUtil.success(player, "New waypoint activated!");
         }
+    }
+
+
+    private Optional<Waypoint> retrieveDuplicate(final List<Waypoint> waypoints, final String name) {
+        return waypoints.stream()
+            .filter(waypoint -> waypoint.getName().equals(name))
+            .findFirst();
     }
 }
