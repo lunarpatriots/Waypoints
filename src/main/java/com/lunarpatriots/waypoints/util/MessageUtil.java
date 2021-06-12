@@ -13,10 +13,10 @@ public class MessageUtil {
     }
 
     public static void success(final Player player, final String message) {
-        player.sendMessage(ChatColor.GREEN + message);
+        player.sendMessage(ChatColor.GREEN + String.format("[Waypoints] %s", message));
     }
 
     public static void fail(final Player player, final String message) {
-        player.sendMessage(ChatColor.RED + message);
+        player.sendMessage(ChatColor.RED + String.format("[Waypoints] %s", message));
     }
 }
