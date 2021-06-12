@@ -7,6 +7,8 @@ import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.model.WaypointsList;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileReader;
@@ -21,6 +23,8 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
+@Getter
+@Setter
 public class DataFileUtil {
 
     public static List<Waypoint> data = new ArrayList<>();
