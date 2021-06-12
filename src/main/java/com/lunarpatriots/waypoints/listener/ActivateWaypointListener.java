@@ -1,6 +1,5 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.LogUtil;
@@ -69,9 +68,9 @@ public class ActivateWaypointListener implements Listener {
             if (ValidatorUtil.isValidWaypointBlock(duplicateWaypoint.getLocation().getBlock())) {
 
                 if (duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())) {
-                    MessageUtil.error(player, "Waypoint already activated!");
+                    MessageUtil.fail(player, "Waypoint already activated!");
                 } else {
-                    MessageUtil.error(player, "Duplicate waypoint name!");
+                    MessageUtil.fail(player, "Duplicate waypoint name!");
                 }
             } else {
                 newWaypoint.setUuid(duplicateWaypoint.getUuid());

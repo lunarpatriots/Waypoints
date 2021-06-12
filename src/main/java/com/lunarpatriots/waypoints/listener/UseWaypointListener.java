@@ -52,7 +52,7 @@ public class UseWaypointListener implements Listener {
                     openSelectionMenu(waypoints, player);
                 } else {
                     MessageUtil
-                        .error(player, "Waypoint is not yet activated! Left-click with a compass to activate.");
+                        .fail(player, "Waypoint is not yet activated! Left-click with a compass to activate.");
                 }
             } catch (final Exception ex) {
                 LogUtil.error(ex.getMessage());
@@ -65,7 +65,7 @@ public class UseWaypointListener implements Listener {
             final Inventory waypointSelector = GuiUtil.initWaypointSelector(plugin, waypoints, player);
             player.openInventory(waypointSelector);
         } else {
-            MessageUtil.error(player, "No other waypoints found in region!");
+            MessageUtil.fail(player, "No other waypoints found in region!");
         }
     }
 

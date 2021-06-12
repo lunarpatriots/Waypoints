@@ -1,5 +1,6 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
@@ -24,6 +25,7 @@ public class MainApp extends JavaPlugin {
         try {
             loadConfig();
             loadDataFile();
+            registerCommands();
             registerEvents();
         } catch (final Exception ex) {
             LogUtil.error("An error occurred while loading plugin.");
@@ -76,5 +78,10 @@ public class MainApp extends JavaPlugin {
         pluginManager.registerEvents(new ActivateWaypointListener(), this);
         pluginManager.registerEvents(new UseWaypointListener(this), this);
         pluginManager.registerEvents(new SelectWaypointListener(this), this);
+    }
+
+    private void registerCommands() {
+        LogUtil.info("Registering commands...");
+        this.getCommand("validate").setExecutor(new ValidateCommand());
     }
 }

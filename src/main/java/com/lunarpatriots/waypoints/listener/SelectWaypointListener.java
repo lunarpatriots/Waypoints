@@ -77,10 +77,10 @@ public class SelectWaypointListener implements Listener {
 
                 player.teleport(targetLocation);
             } else {
-                MessageUtil.error(player, "You do not have enough exp to fast travel to that location!");
+                MessageUtil.fail(player, "You do not have enough exp to fast travel to that location!");
             }
         } else {
-            MessageUtil.error(player, "Fast travel point not found! Removing from list...");
+            MessageUtil.fail(player, "Fast travel point not found! Removing from list...");
             final WaypointRepository repository = new WaypointRepository();
             repository.deleteWaypoint(waypoint);
         }
