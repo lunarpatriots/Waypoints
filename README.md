@@ -28,5 +28,3 @@ Dependencies can be found in the `pom.xml`.
 - Compilation is handled by Maven by running the command `mvn clean install`
 - Once successfully compiled, the jar file can be found in the `/target/` folder.
 
-## Contributions
-Want to contribute to this project? You can contact me at [lunarpatriots@gmail.com](mailto:lunarpatriots@gmail.com).
