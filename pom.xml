@@ -7,7 +7,7 @@
     <groupId>com.lunarpatriots</groupId>
     <artifactId>waypoints</artifactId>
     <name>Waypoints</name>
-    <version>0.7</version>
+    <version>0.8</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
