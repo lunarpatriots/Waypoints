@@ -78,7 +78,7 @@ public class MainApp extends JavaPlugin {
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
         pluginManager.registerEvents(new ActivateWaypointListener(), this);
         pluginManager.registerEvents(new UseWaypointListener(this), this);
-        pluginManager.registerEvents(new SelectWaypointListener(this), this);
+        pluginManager.registerEvents(new SelectWaypointListener(), this);
     }
 
     private void registerCommands() {

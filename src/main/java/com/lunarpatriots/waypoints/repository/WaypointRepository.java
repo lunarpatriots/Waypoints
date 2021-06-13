@@ -2,8 +2,6 @@ package com.lunarpatriots.waypoints.repository;
 
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.util.DataFileUtil;
-import com.lunarpatriots.waypoints.util.LogUtil;
-import com.lunarpatriots.waypoints.util.ValidatorUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;

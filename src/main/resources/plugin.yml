@@ -1,6 +1,6 @@
 main: ${project.groupId}.${project.artifactId}.MainApp
 name: ${project.name}
-version: ${project.version}
+version: ${modified.version}
 author: lunarpatriots
 api-version: 1.16
 
