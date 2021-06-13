@@ -11,3 +11,6 @@ commands:
   clean:
     description: Removes all invalid waypoints
     usage: /clean
+  list:
+    description: Lists waypoints in the given region
+    usage: /list
