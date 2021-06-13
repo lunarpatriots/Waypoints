@@ -45,7 +45,7 @@ public class GuiUtil {
     private static ItemStack createWaypointSelection(final Waypoint waypoint,
                                                      final Player player,
                                                      final MainApp plugin) {
-        final ItemStack selection = new ItemStack(Material.WARPED_SIGN);
+        final ItemStack selection = new ItemStack(Material.FILLED_MAP);
         final double costPerBlock = ConfigUtil.getDouble(plugin, "exp-per-block");
         final int minDistance = ConfigUtil.getInt(plugin, "min-distance");
 
