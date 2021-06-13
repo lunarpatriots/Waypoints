@@ -1,10 +1,8 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
-import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
