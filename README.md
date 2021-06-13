@@ -1,4 +1,8 @@
 # Waypoints
+[![GitHub last commit](https://img.shields.io/github/last-commit/lunarpatriots/waypoints.svg?logo=github)](https://github.com/lunarpatriots/waypoints/commits/master)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/lunarpatriots/waypoints.svg?logo=github)](https://github.com/lunarpatriots/waypoints)
+[![GitHub contributors](https://img.shields.io/github/contributors/lunarpatriots/waypoints.svg)](https://github.com/lunarpatriots/waypoints/graphs/contributors)
+
 Create RPG-style fast travel waypoints for your server in minecraft! To prevent player abuse,
 an exp cost penalty is enforced. The further the distance traveled, the higher the exp cost.
 
