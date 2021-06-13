@@ -8,6 +8,7 @@ import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
@@ -44,7 +45,7 @@ public class SelectWaypointListener implements Listener {
             final ItemStack selectedWaypoint = event.getCurrentItem();
 
             if (Optional.ofNullable(selectedWaypoint).isPresent()
-                    && Tag.SIGNS.isTagged(selectedWaypoint.getType())) {
+                    && Material.FILLED_MAP == selectedWaypoint.getType()) {
 
                 final ItemMeta waypointInfo = selectedWaypoint.getItemMeta();
                 final Player player = (Player) event.getWhoClicked();
