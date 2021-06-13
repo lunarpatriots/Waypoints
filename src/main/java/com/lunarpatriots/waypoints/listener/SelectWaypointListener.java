@@ -9,6 +9,8 @@ import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -75,6 +77,8 @@ public class SelectWaypointListener implements Listener {
                     ExpUtil.changePlayerExp(player, -cost);
                 }
 
+                player.spawnParticle(Particle.PORTAL, targetLocation, 500);
+                player.playSound(targetLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.teleport(targetLocation);
             } else {
                 MessageUtil.fail(player, "You do not have enough exp to fast travel to that location!");
