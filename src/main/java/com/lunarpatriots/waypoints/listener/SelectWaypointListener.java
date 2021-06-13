@@ -74,8 +74,6 @@ public class SelectWaypointListener implements Listener {
                     ExpUtil.changePlayerExp(player, -cost);
                 }
 
-                player.spawnParticle(Particle.PORTAL, targetLocation, 500);
-                player.playSound(targetLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.teleport(targetLocation);
             } else {
                 MessageUtil.fail(player, "You do not have enough exp to fast travel to that location!");
