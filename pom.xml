@@ -7,7 +7,7 @@
     <groupId>com.lunarpatriots</groupId>
     <artifactId>waypoints</artifactId>
     <name>Waypoints</name>
-    <version>0.8.1</version>
+    <version>0.8.1-SNAPSHOT</version>
 
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->
@@ -42,7 +42,38 @@
     </dependencies>
 
     <build>
+        <finalName>waypoints-${modified.version}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>regex-property</id>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>modified.version</name>
+                            <value>${project.version}</value>
+                            <regex>\.([0-9]+)-SNAPSHOT</regex>
+                            <replacement>.$1</replacement>
+                            <failIfNoMatch>false</failIfNoMatch>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                        <configuration>
+                            <versionString>${modified.version}</versionString>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

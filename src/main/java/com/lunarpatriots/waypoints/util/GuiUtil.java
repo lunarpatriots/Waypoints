@@ -1,6 +1,7 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,7 @@ public class GuiUtil {
         final Inventory selectionGui = Bukkit.createInventory(
             player,
             inventorySize,
-            ChatColor.DARK_GREEN + ConfigUtil.getString(plugin, "selector-title"));
+            ChatColor.DARK_GREEN + Constants.GUI_TITLE);
         waypoints.forEach(waypoint -> {
             final ItemStack selection = createWaypointSelection(waypoint, player, plugin);
             selectionGui.addItem(selection);

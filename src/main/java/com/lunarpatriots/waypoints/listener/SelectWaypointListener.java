@@ -1,6 +1,7 @@
 package com.lunarpatriots.waypoints.listener;
 
 import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.Waypoint;
 import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
@@ -30,17 +31,14 @@ import java.util.Optional;
  */
 public class SelectWaypointListener implements Listener {
 
-    private final MainApp plugin;
-
-    public SelectWaypointListener(final MainApp plugin) {
-        this.plugin = plugin;
+    public SelectWaypointListener() {
     }
 
     @EventHandler
     public void onWaypointSelect(final InventoryClickEvent event) {
         final InventoryView openedInventory = event.getView();
 
-        final String guiName = ChatColor.DARK_GREEN + ConfigUtil.getString(plugin, "selector-title");
+        final String guiName = ChatColor.DARK_GREEN + Constants.GUI_TITLE;
         final String eventGuiName = openedInventory.getTitle();
 
         if (guiName.equalsIgnoreCase(eventGuiName)) {
