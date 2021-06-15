@@ -1,9 +1,11 @@
 package com.lunarpatriots.waypoints.listener;
 
+import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.constants.Constants;
-import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.ExpUtil;
+import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.ChatColor;
@@ -11,7 +13,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,7 +31,10 @@ import java.util.Optional;
  */
 public class SelectWaypointListener implements Listener {
 
-    public SelectWaypointListener() {
+    private final WaypointRepository repository;
+
+    public SelectWaypointListener(final WaypointRepository repository) {
+        this.repository = repository;
     }
 
     @EventHandler
@@ -82,8 +86,12 @@ public class SelectWaypointListener implements Listener {
             }
         } else {
             MessageUtil.fail(player, "Fast travel point not found! Removing from list...");
-            final WaypointRepository repository = new WaypointRepository();
-            repository.deleteWaypoint(waypoint);
+
+            try {
+                repository.deleteWaypoint(waypoint.getUuid());
+            } catch (final DatabaseException ex) {
+                LogUtil.error(ex.getMessage());
+            }
         }
     }
 }

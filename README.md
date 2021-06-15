@@ -15,7 +15,8 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Right-clicking on an activated waypoint brings up a menu in which you can select another existing waypoint to fast travel to.
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
-- Exp cost per block and the max distance for free travelling is configurable
+- Exp cost per block, and the max distance for free travelling is configurable
+- Database integration to store data
 
 ## Project Dependencies
 Dependencies can be found in the `pom.xml`.
@@ -23,6 +24,7 @@ Dependencies can be found in the `pom.xml`.
 - [Maven](https://maven.apache.org/download.cgi) - Build automation tool primarily used for Java projects
 - [Spigot 1.16.5](https://www.spigotmc.org/wiki/spigot-maven/) - A Minecraft Server API
 - [Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for model/data objects
+- [SQLite](https://www.sqlite.org/about.html) - Library that implements a self-contained, zero-configuration, transactional SQL database engine
 
 ## Compilation
 - Compilation is handled by Maven by running the command `mvn clean install`

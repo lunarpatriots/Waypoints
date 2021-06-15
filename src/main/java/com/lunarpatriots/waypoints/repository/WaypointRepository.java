@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.repository;
 
-import com.lunarpatriots.waypoints.model.Waypoint;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.util.DataFileUtil;
 
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
+@Deprecated
 public class WaypointRepository {
 
     public List<Waypoint> getWaypoints(final String worldName) {

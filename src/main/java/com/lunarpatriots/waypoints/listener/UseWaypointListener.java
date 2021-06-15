@@ -1,8 +1,8 @@
 package com.lunarpatriots.waypoints.listener;
 
 import com.lunarpatriots.waypoints.MainApp;
-import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.repository.WaypointRepository;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.GuiUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
@@ -25,12 +25,12 @@ import java.util.Optional;
  */
 public class UseWaypointListener implements Listener {
 
-    private final WaypointRepository repository;
     private final MainApp plugin;
+    private final WaypointRepository repository;
 
-    public UseWaypointListener(final MainApp plugin) {
+    public UseWaypointListener(final MainApp plugin, final WaypointRepository repository) {
         this.plugin = plugin;
-        this.repository = new WaypointRepository();
+        this.repository = repository;
     }
 
     @EventHandler

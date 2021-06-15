@@ -1,7 +1,10 @@
 package com.lunarpatriots.waypoints.commands;
 
-import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.util.DataFileUtil;
+import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
+import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.bukkit.command.Command;
@@ -17,6 +20,12 @@ import java.util.List;
  */
 public class ValidateCommand implements TabExecutor {
 
+    private final WaypointRepository repository;
+
+    public ValidateCommand(final WaypointRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public boolean onCommand(final CommandSender commandSender,
                              final Command command,
@@ -24,17 +33,22 @@ public class ValidateCommand implements TabExecutor {
                              final String[] strings) {
         final Player player = (Player) commandSender;
 
-        final List<Waypoint> waypoints = DataFileUtil.data;
-        final long count = waypoints.stream()
-            .filter(waypoint -> ValidatorUtil.isValidWaypointBlock(waypoint.getLocation().getBlock()))
-            .count();
+        try {
+            final List<Waypoint> waypoints = repository.getWaypoints();
 
-        final String msg = String.format("%s/%s valid waypoints", count, waypoints.size());
+            final long count = waypoints.stream()
+                .filter(waypoint -> ValidatorUtil.isValidWaypointBlock(waypoint.getLocation().getBlock()))
+                .count();
 
-        if (count == waypoints.size()) {
-            MessageUtil.success(player, msg);
-        } else {
-            MessageUtil.fail(player, msg);
+            final String msg = String.format("%s/%s valid waypoints", count, waypoints.size());
+
+            if (count == waypoints.size()) {
+                MessageUtil.success(player, msg);
+            } else {
+                MessageUtil.fail(player, msg);
+            }
+        } catch (final DatabaseException ex) {
+            LogUtil.error(ex.getMessage());
         }
 
         return true;

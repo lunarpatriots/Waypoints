@@ -1,8 +1,8 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.constants.Constants;
-import com.lunarpatriots.waypoints.model.Waypoint;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
