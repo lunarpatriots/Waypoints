@@ -37,27 +37,51 @@ public class WaypointsCommand implements TabExecutor {
         final Player player = (Player) commandSender;
 
         try {
-            final String keyword = strings[0];
+            
             final World world = player.getWorld();
-            final Region chosenRegion = Region.getRegion(keyword);
-            final Region currentRegion = Region.getRegion(world.getEnvironment());
+            final Region chosenRegion;
+            final Region currentRegion;
             final String currentWorldName = world.getName();
 
             final String queryWorld;
-            if (currentRegion == chosenRegion) {
-                queryWorld = currentWorldName;
+
+            if(strings.length == 0){
+                allWaypoints(player);
             } else {
-                queryWorld = StringUtils.isNotBlank(currentRegion.getSuffix())
-                    ? currentWorldName.replace(currentRegion.getSuffix(), chosenRegion.getSuffix())
-                    : currentWorldName.concat(chosenRegion.getSuffix());
+                final String keyword = strings[0];
+                chosenRegion = Region.getRegion(keyword);
+                currentRegion = Region.getRegion(world.getEnvironment());
+                if (currentRegion == chosenRegion) {
+                    queryWorld = currentWorldName;
+                } else {
+                    queryWorld = StringUtils.isNotBlank(currentRegion.getSuffix())
+                        ? currentWorldName.replace(currentRegion.getSuffix(), chosenRegion.getSuffix())
+                        : currentWorldName.concat(chosenRegion.getSuffix());
+                }
+                listWaypoints(queryWorld, player, chosenRegion);
             }
 
-            listWaypoints(queryWorld, player, chosenRegion);
+            
+
+            
         } catch (final Exception ex) {
             LogUtil.error(ex.getMessage());
         }
 
         return true;
+    }
+
+    private void allWaypoints(final Player player) throws DatabaseException{
+        final List<Waypoint> allWaypoint = repository.getWaypoints();
+        if(allWaypoint.size() > 0){
+            final String allWayStrings = allWaypoint.stream().map(Waypoint::getName).collect(Collectors.joining("\n- "));
+
+            final String msg = String.format("All Waypoints: \n- %s", allWayStrings);
+            MessageUtil.success(player, msg);
+        }else {
+            MessageUtil.fail(player,
+                "There are no waypoints in this world!");
+        }
     }
 
     private void listWaypoints(final String queryWorld,
@@ -68,10 +92,10 @@ public class WaypointsCommand implements TabExecutor {
         if (waypoints.size() > 0) {
             final String waypointsString = waypoints.stream()
                 .map(Waypoint::getName)
-                .collect(Collectors.joining("\n -"));
+                .collect(Collectors.joining("\n- "));
 
             final String msg = String.format(
-                "%s %sWaypoints:\n -%s",
+                "%s %sWaypoints:\n- %s",
                 chosenRegion.getDisplayValue(),
                 ChatColor.GREEN,
                 waypointsString);
