@@ -3,17 +3,13 @@ package com.lunarpatriots.waypoints;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.commands.CleanCommand;
-<<<<<<< HEAD
 import com.lunarpatriots.waypoints.commands.ListCommand;
-=======
 import com.lunarpatriots.waypoints.commands.ImportCommand;
->>>>>>> 93fee48 (SQLite database for storing data)
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
 import com.lunarpatriots.waypoints.listener.UseWaypointListener;
-import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.DataFileUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
