@@ -11,3 +11,6 @@ commands:
   clean:
     description: Removes all invalid waypoints
     usage: /clean
+  import:
+    description: Import info from json file
+    usage: /import <json file>
