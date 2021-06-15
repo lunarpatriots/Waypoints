@@ -1,6 +1,6 @@
 package com.lunarpatriots.waypoints.model.dto;
 
-import com.lunarpatriots.waypoints.model.Waypoint;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class WaypointDto extends Waypoint {
+
     private int cost;
 
     public WaypointDto(final String world, final ItemMeta waypointInfo) {

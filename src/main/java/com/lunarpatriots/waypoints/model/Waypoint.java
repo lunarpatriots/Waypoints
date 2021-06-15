@@ -15,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated
 public class Waypoint {
     private String uuid;
     private String name;
