@@ -1,7 +1,9 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.repository.WaypointRepository;
+import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
@@ -25,10 +27,10 @@ import java.util.UUID;
  */
 public class ActivateWaypointListener implements Listener {
 
-    private WaypointRepository repository;
+    public final WaypointRepository repository;
 
-    public ActivateWaypointListener() {
-        this.repository = new WaypointRepository();
+    public ActivateWaypointListener(final WaypointRepository repository) {
+        this.repository = repository;
     }
 
     @EventHandler
@@ -53,30 +55,34 @@ public class ActivateWaypointListener implements Listener {
     }
 
     private void saveWaypoint(final Waypoint newWaypoint, final Player player) {
-        final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
-        final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
+        try {
+            final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
+            final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
 
-        if (duplicate.isPresent()) {
-            final Waypoint duplicateWaypoint = duplicate.get();
-            final Block duplicateBlock = duplicateWaypoint.getLocation().getBlock();
+            if (duplicate.isPresent()) {
+                final Waypoint duplicateWaypoint = duplicate.get();
+                final Block duplicateBlock = duplicateWaypoint.getLocation().getBlock();
 
-            if (ValidatorUtil.isValidWaypointBlock(duplicateBlock)) {
-                final String msg = duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())
-                    ? "Waypoint already activated!"
-                    : String.format(
+                if (ValidatorUtil.isValidWaypointBlock(duplicateBlock)) {
+                    final String msg = duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())
+                        ? "Waypoint already activated!"
+                        : String.format(
                         "A waypoint with the name %s already exists! Please set a different waypoint name.",
                         newWaypoint.getName());
 
-                MessageUtil.fail(player, msg);
+                    MessageUtil.fail(player, msg);
+                } else {
+                    newWaypoint.setUuid(duplicateWaypoint.getUuid());
+                    repository.updateWaypoint(newWaypoint);
+                    MessageUtil.success(player, "New waypoint activated!");
+                }
             } else {
-                newWaypoint.setUuid(duplicateWaypoint.getUuid());
-                repository.updateWaypoint(newWaypoint);
+                newWaypoint.setUuid(UUID.randomUUID().toString());
+                repository.saveWaypoint(newWaypoint);
                 MessageUtil.success(player, "New waypoint activated!");
             }
-        } else {
-            newWaypoint.setUuid(UUID.randomUUID().toString());
-            repository.saveWaypoint(newWaypoint);
-            MessageUtil.success(player, "New waypoint activated!");
+        } catch (final DatabaseException ex) {
+            LogUtil.error(ex.getMessage());
         }
     }
 

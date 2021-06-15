@@ -1,25 +1,18 @@
 package com.lunarpatriots.waypoints.commands;
 
-import com.lunarpatriots.waypoints.model.Waypoint;
-import com.lunarpatriots.waypoints.repository.WaypointRepository;
-import com.lunarpatriots.waypoints.util.DataFileUtil;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
-import com.lunarpatriots.waypoints.util.ValidatorUtil;
-
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.World;
-import org.bukkit.WorldType;
-import org.bukkit.World.Environment;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import net.md_5.bungee.api.ChatColor;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -77,34 +70,43 @@ public class ListCommand implements TabExecutor {
         }
     };
 
+    private final WaypointRepository repository;
+
+    public ListCommand(final WaypointRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public boolean onCommand(final CommandSender commandSender, final Command command, final String s,
             final String[] strings) {
         final Player player = (Player) commandSender;
 
-        final WaypointRepository waypointrepo = new WaypointRepository();
         String msg = "";
         String waypoints = "";
         List<Waypoint> waypointRegion = new ArrayList<Waypoint>();
 
-        if (player.getWorld().getEnvironment().equals(World.Environment.NORMAL)){
-            waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName() + Region.getRegion(strings[0]));
-        } else if (player.getWorld().getEnvironment().equals(World.Environment.NETHER)){
-            waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName().replace("_nether", Region.getRegion(strings[0])));
-        } else if (player.getWorld().getEnvironment().equals(World.Environment.THE_END)){
-            waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName().replace("_the_end", Region.getRegion(strings[0])));
+        try {
+            if (player.getWorld().getEnvironment().equals(World.Environment.NORMAL)){
+                waypointRegion = repository.getWaypoints(player.getWorld().getName() + Region.getRegion(strings[0]));
+            } else if (player.getWorld().getEnvironment().equals(World.Environment.NETHER)){
+                waypointRegion = repository.getWaypoints(player.getWorld().getName().replace("_nether", Region.getRegion(strings[0])));
+            } else if (player.getWorld().getEnvironment().equals(World.Environment.THE_END)){
+                waypointRegion = repository.getWaypoints(player.getWorld().getName().replace("_the_end", Region.getRegion(strings[0])));
+            }
+
+            waypoints = waypointRegion.stream().map(Waypoint::getName).collect(Collectors.joining("\n- "));
+            if(waypoints.length() != 0){
+                msg =  Region.getRegionMessage(strings[0]) + "- ";
+                msg += String.format("%s", waypoints);
+                MessageUtil.success(player, msg);
+            } else {
+                msg = "There are no valid waypoints on this region! ";
+                MessageUtil.fail(player, msg);
+            }
+        } catch (final Exception ex) {
+            LogUtil.error(ex.getMessage());
         }
 
-        waypoints = waypointRegion.stream().map(Waypoint::getName).collect(Collectors.joining("\n- "));
-        if(waypoints.length() != 0){
-            msg =  Region.getRegionMessage(strings[0]) + "- ";
-            msg += String.format("%s", waypoints);
-            MessageUtil.success(player, msg);
-        } else {
-            msg = "There are no valid waypoints on this region! ";
-            MessageUtil.fail(player, msg);
-        }
-        
 
         return true;
     }

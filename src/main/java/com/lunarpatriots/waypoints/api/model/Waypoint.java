@@ -1,4 +1,4 @@
-package com.lunarpatriots.waypoints.model;
+package com.lunarpatriots.waypoints.api.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +11,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
+/**
+ * Created By: lunarpatriots@gmail.com
+ * Date created: 06/14/2021
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Deprecated
 public class Waypoint {
+
     private String uuid;
     private String name;
     private String world;
@@ -45,7 +49,7 @@ public class Waypoint {
 
         this.world = world;
         this.name = itemMeta.getDisplayName();
-        this.uuid = lore.get(0).split(" ")[1];
+        this.uuid = (lore.get(0).split(" ")[1]);
         this.x = Integer.parseInt(lore.get(1).split(" ")[1]);
         this.y = Integer.parseInt(lore.get(2).split(" ")[1]);
         this.z = Integer.parseInt(lore.get(3).split(" ")[1]);

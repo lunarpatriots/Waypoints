@@ -1,5 +1,6 @@
 package com.lunarpatriots.waypoints.model;
 
+import com.lunarpatriots.waypoints.api.model.Waypoint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

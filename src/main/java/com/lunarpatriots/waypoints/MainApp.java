@@ -1,7 +1,10 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
+import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.commands.CleanCommand;
 import com.lunarpatriots.waypoints.commands.ListCommand;
+import com.lunarpatriots.waypoints.commands.ImportCommand;
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.exceptions.DataFileException;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
@@ -26,24 +29,18 @@ public class MainApp extends JavaPlugin {
     public void onEnable() {
         try {
             loadConfig();
-            loadDataFile();
-            registerCommands();
-            registerEvents();
+            final WaypointRepository repository = loadDb();
+
+            registerCommands(repository);
+            registerEvents(repository);
         } catch (final Exception ex) {
             LogUtil.error("An error occurred while loading plugin.");
-            LogUtil.error(ex.getMessage());
-            Bukkit.getServer().getPluginManager().disablePlugin(this);
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void onDisable() {
-        LogUtil.info("Saving waypoints...");
-        try {
-            DataFileUtil.saveToFile(this);
-        } catch (final Exception ex) {
-            LogUtil.error(ex.getMessage());
-        }
     }
 
     private void loadConfig() throws Exception {
@@ -63,29 +60,50 @@ public class MainApp extends JavaPlugin {
 
         try {
             config.load(new File(directory, "config.yml"));
+            final String configVersion = config.getString("version", "");
+            final String pluginVersion = this.getDescription().getVersion();
+
+            if (!pluginVersion.equals(configVersion)) {
+                LogUtil.warn("Config file is outdated!");
+            }
         } catch (final Exception ex) {
             LogUtil.error("Failed to load config file!");
             throw ex;
         }
     }
 
+    @Deprecated
     public void loadDataFile() throws DataFileException {
         LogUtil.info("Loading data file...");
         DataFileUtil.loadFromFile(this);
     }
 
-    private void registerEvents() {
-        LogUtil.info("Registering events...");
-        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new ActivateWaypointListener(), this);
-        pluginManager.registerEvents(new UseWaypointListener(this), this);
-        pluginManager.registerEvents(new SelectWaypointListener(), this);
+    public WaypointRepository loadDb() throws DatabaseException {
+        LogUtil.info("Loading database...");
+
+        final WaypointRepository repository = new WaypointRepository(this);
+        try {
+            repository.initTable();
+            return repository;
+        } catch (final DatabaseException ex) {
+            LogUtil.error("Failed to initialize table.");
+            throw ex;
+        }
     }
 
-    private void registerCommands() {
+    private void registerEvents(final WaypointRepository repository) {
+        LogUtil.info("Registering events...");
+        final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
+        pluginManager.registerEvents(new ActivateWaypointListener(repository), this);
+        pluginManager.registerEvents(new UseWaypointListener(this, repository), this);
+        pluginManager.registerEvents(new SelectWaypointListener(repository), this);
+    }
+
+    private void registerCommands(final WaypointRepository repository) {
         LogUtil.info("Registering commands...");
-        this.getCommand("validate").setExecutor(new ValidateCommand());
-        this.getCommand("clean").setExecutor(new CleanCommand());
-        this.getCommand("list").setExecutor(new ListCommand());
+        this.getCommand("validate").setExecutor(new ValidateCommand(repository));
+        this.getCommand("clean").setExecutor(new CleanCommand(repository));
+        this.getCommand("list").setExecutor(new ListCommand(repository));
+        this.getCommand("import").setExecutor(new ImportCommand(this, repository));
     }
 }
