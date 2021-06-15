@@ -16,7 +16,7 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
 - Exp cost per block, and the max distance for free travelling is configurable
-- Database integration to store data
+- Uses database to store waypoint data
 
 ## Project Dependencies
 Dependencies can be found in the `pom.xml`.
