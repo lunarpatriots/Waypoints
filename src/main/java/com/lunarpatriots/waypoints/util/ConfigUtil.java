@@ -18,10 +18,10 @@ public class ConfigUtil {
         return config.getInt(key);
     }
 
-    public static String getString(final MainApp plugin, final String key) {
+    public static String getString(final MainApp plugin, final String key, final String defaultVal) {
         final FileConfiguration config = plugin.getConfig();
 
-        return config.getString(key);
+        return config.getString(key, "");
     }
 
     public static double getDouble(final MainApp plugin, final String key) {

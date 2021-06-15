@@ -11,9 +11,9 @@ commands:
   clean:
     description: Removes all invalid waypoints
     usage: /clean
-  list:
+  waypoints:
     description: Lists waypoints in the given region
-    usage: /list
+    usage: /waypoints
   import:
     description: Import info from json file
     usage: /import <json file>
