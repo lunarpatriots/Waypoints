@@ -72,7 +72,7 @@ public class ListCommand implements TabExecutor {
 
     private final WaypointRepository repository;
 
-    private ListCommand(final WaypointRepository repository) {
+    public ListCommand(final WaypointRepository repository) {
         this.repository = repository;
     }
 

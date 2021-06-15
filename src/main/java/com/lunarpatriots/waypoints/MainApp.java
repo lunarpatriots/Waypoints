@@ -103,7 +103,7 @@ public class MainApp extends JavaPlugin {
         LogUtil.info("Registering commands...");
         this.getCommand("validate").setExecutor(new ValidateCommand(repository));
         this.getCommand("clean").setExecutor(new CleanCommand(repository));
-        this.getCommand("list").setExecutor(new ListCommand());
+        this.getCommand("list").setExecutor(new ListCommand(repository));
         this.getCommand("import").setExecutor(new ImportCommand(this, repository));
     }
 }
