@@ -1,7 +1,7 @@
 package com.lunarpatriots.waypoints.api.constants;
 
 /**
- * Created By: tristan.hamili@novare.com.hk
+ * Created By: lunarpatriots@gmail.com
  * Date created: 06/15/2021
  */
 public class SqlConstants {

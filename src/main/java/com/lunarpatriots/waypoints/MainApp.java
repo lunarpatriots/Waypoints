@@ -3,17 +3,15 @@ package com.lunarpatriots.waypoints;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.commands.CleanCommand;
-import com.lunarpatriots.waypoints.commands.ListCommand;
 import com.lunarpatriots.waypoints.commands.ImportCommand;
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
-import com.lunarpatriots.waypoints.exceptions.DataFileException;
+import com.lunarpatriots.waypoints.commands.WaypointsCommand;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
 import com.lunarpatriots.waypoints.listener.UseWaypointListener;
-import com.lunarpatriots.waypoints.util.DataFileUtil;
+import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -56,11 +54,8 @@ public class MainApp extends JavaPlugin {
             this.saveDefaultConfig();
         }
 
-        final FileConfiguration config = this.getConfig();
-
         try {
-            config.load(new File(directory, "config.yml"));
-            final String configVersion = config.getString("version", "");
+            final String configVersion = ConfigUtil.getString(this, "version", "");
             final String pluginVersion = this.getDescription().getVersion();
 
             if (!pluginVersion.equals(configVersion)) {
@@ -70,12 +65,6 @@ public class MainApp extends JavaPlugin {
             LogUtil.error("Failed to load config file!");
             throw ex;
         }
-    }
-
-    @Deprecated
-    public void loadDataFile() throws DataFileException {
-        LogUtil.info("Loading data file...");
-        DataFileUtil.loadFromFile(this);
     }
 
     public WaypointRepository loadDb() throws DatabaseException {
@@ -103,7 +92,7 @@ public class MainApp extends JavaPlugin {
         LogUtil.info("Registering commands...");
         this.getCommand("validate").setExecutor(new ValidateCommand(repository));
         this.getCommand("clean").setExecutor(new CleanCommand(repository));
-        this.getCommand("list").setExecutor(new ListCommand(repository));
+        this.getCommand("waypoints").setExecutor(new WaypointsCommand(repository));
         this.getCommand("import").setExecutor(new ImportCommand(this, repository));
     }
 }
