@@ -14,3 +14,6 @@ commands:
   list:
     description: Lists waypoints in the given region
     usage: /list
+  import:
+    description: Import info from json file
+    usage: /import <json file>
