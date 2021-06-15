@@ -70,23 +70,28 @@ public class ListCommand implements TabExecutor {
         }
     };
 
+    private final WaypointRepository repository;
+
+    private ListCommand(final WaypointRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public boolean onCommand(final CommandSender commandSender, final Command command, final String s,
             final String[] strings) {
         final Player player = (Player) commandSender;
 
-        final WaypointRepository waypointrepo = new WaypointRepository();
         String msg = "";
         String waypoints = "";
         List<Waypoint> waypointRegion = new ArrayList<Waypoint>();
 
         try {
             if (player.getWorld().getEnvironment().equals(World.Environment.NORMAL)){
-                waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName() + Region.getRegion(strings[0]));
+                waypointRegion = repository.getWaypoints(player.getWorld().getName() + Region.getRegion(strings[0]));
             } else if (player.getWorld().getEnvironment().equals(World.Environment.NETHER)){
-                waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName().replace("_nether", Region.getRegion(strings[0])));
+                waypointRegion = repository.getWaypoints(player.getWorld().getName().replace("_nether", Region.getRegion(strings[0])));
             } else if (player.getWorld().getEnvironment().equals(World.Environment.THE_END)){
-                waypointRegion = waypointrepo.getWaypoints(player.getWorld().getName().replace("_the_end", Region.getRegion(strings[0])));
+                waypointRegion = repository.getWaypoints(player.getWorld().getName().replace("_the_end", Region.getRegion(strings[0])));
             }
 
             waypoints = waypointRegion.stream().map(Waypoint::getName).collect(Collectors.joining("\n- "));
