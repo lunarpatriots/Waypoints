@@ -1,5 +1,5 @@
 # Waypoints
-![GitHub workflow status](https://img.shields.io/github/workflow/status/lunarpatriots/Waypoints/Build%20Project/develop?logo=github)
+![GitHub workflow status](https://img.shields.io/github/workflow/status/lunarpatriots/Waypoints/Build/develop?logo=github)
 [![GitHub last commit](https://img.shields.io/github/last-commit/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/commits/develop)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints)
 [![GitHub contributors](https://img.shields.io/github/contributors/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/graphs/contributors)
