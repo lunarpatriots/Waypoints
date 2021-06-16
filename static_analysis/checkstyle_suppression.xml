@@ -10,5 +10,4 @@
     <suppress checks="ClassDataAbstractionCoupling" files="MainApp.java"/>
     <suppress checks="MagicNumber" files="SqlUtil.java"/>
     <suppress checks="MagicNumber" files="Waypoint.java"/>
-    <suppress checks="MagicNumber" files="WaypointDto.java"/>
 </suppressions>
