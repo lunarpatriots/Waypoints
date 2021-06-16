@@ -16,6 +16,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,14 +32,12 @@ public final class WaypointsCommand implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(final CommandSender commandSender,
-                             final Command command,
-                             final String string,
-                             final String[] strings) {
+    public boolean onCommand(final CommandSender commandSender, final Command command, final String string,
+            final String[] strings) {
         final Player player = (Player) commandSender;
 
         try {
-            
+
             final World world = player.getWorld();
             final Region chosenRegion;
             final Region currentRegion;
@@ -46,8 +45,8 @@ public final class WaypointsCommand implements TabExecutor {
 
             final String queryWorld;
 
-            if(strings.length == 0){
-                allWaypoints(player);
+            if (strings.length == 0) {
+                listWaypoints(null, player, null);
             } else {
                 final String keyword = strings[0];
                 chosenRegion = Region.getRegion(keyword);
@@ -56,15 +55,12 @@ public final class WaypointsCommand implements TabExecutor {
                     queryWorld = currentWorldName;
                 } else {
                     queryWorld = StringUtils.isNotBlank(currentRegion.getSuffix())
-                        ? currentWorldName.replace(currentRegion.getSuffix(), chosenRegion.getSuffix())
-                        : currentWorldName.concat(chosenRegion.getSuffix());
+                            ? currentWorldName.replace(currentRegion.getSuffix(), chosenRegion.getSuffix())
+                            : currentWorldName.concat(chosenRegion.getSuffix());
                 }
                 listWaypoints(queryWorld, player, chosenRegion);
             }
 
-            
-
-            
         } catch (final Exception ex) {
             LogUtil.error(ex.getMessage());
         }
@@ -72,48 +68,35 @@ public final class WaypointsCommand implements TabExecutor {
         return true;
     }
 
-    private void allWaypoints(final Player player) throws DatabaseException{
-        final List<Waypoint> allWaypoint = repository.getWaypoints();
-        if(allWaypoint.size() > 0){
-            final String allWayStrings = allWaypoint.stream().map(Waypoint::getName).collect(Collectors.joining("\n- "));
-
-            final String msg = String.format("All Waypoints: \n- %s", allWayStrings);
-            MessageUtil.success(player, msg);
-        }else {
-            MessageUtil.fail(player,
-                "There are no waypoints in this world!");
-        }
-    }
-
-    private void listWaypoints(final String queryWorld,
-                               final Player player,
-                               final Region chosenRegion) throws DatabaseException {
-        final List<Waypoint> waypoints = repository.filterWaypoints(queryWorld);
+    private void listWaypoints(final String queryWorld, final Player player, final Region chosenRegion)
+            throws DatabaseException {
+        final List<Waypoint> waypoints = Optional.ofNullable(chosenRegion).isPresent()
+                ? repository.filterWaypoints(queryWorld)
+                : repository.getWaypoints();
 
         if (waypoints.size() > 0) {
+            final String region = Optional.ofNullable(chosenRegion).isPresent() ? chosenRegion.getDisplayValue()
+                    : "All";
+
             ValidatorUtil.removeInvalidWaypoints(waypoints, repository);
 
-            final String waypointsString = waypoints.stream()
-                .map(Waypoint::getName)
-                .collect(Collectors.joining("\n- "));
+            final String waypointsString = waypoints.stream().map(Waypoint::getName)
+                    .collect(Collectors.joining("\n- "));
 
-            final String msg = String.format(
-                "%s %sWaypoints:\n- %s",
-                chosenRegion.getDisplayValue(),
-                ChatColor.GREEN,
-                waypointsString);
+            final String msg = String.format("%s %sWaypoints:\n- %s", region, ChatColor.GREEN, waypointsString);
             MessageUtil.success(player, msg);
         } else {
-            MessageUtil.fail(player,
-                "There are no waypoints in the " + chosenRegion.getKeyword() + " region!");
+            final String errorMsg = Optional.ofNullable(chosenRegion).isPresent()
+                    ? "There are no waypoints in " + chosenRegion.getKeyword() + " region!"
+                    : "There are no current waypoints in this world!";
+
+            MessageUtil.fail(player, errorMsg);
         }
     }
 
     @Override
-    public List<String> onTabComplete(final CommandSender commandSender,
-                                      final Command command,
-                                      final String string,
-                                      final String[] strings) {
+    public List<String> onTabComplete(final CommandSender commandSender, final Command command, final String string,
+            final String[] strings) {
 
         return null;
     }
