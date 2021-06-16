@@ -5,11 +5,11 @@ name: Build
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, master ]
     paths-ignore:
       - '**/README.md'
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, master ]
     paths-ignore:
       - '**/README.md'
 
@@ -37,6 +37,7 @@ jobs:
       run: mvn clean package -DskipTests
     # Upload artifacts
     - name: Upload artifacts
+      if: github.ref == 'refs/heads/master'
       uses: actions/upload-artifact@v2.2.3
       with:
         name: artifacts
