@@ -55,7 +55,7 @@ public final class ActivateWaypointListener implements Listener {
 
     private void saveWaypoint(final Waypoint newWaypoint, final Player player) {
         try {
-            final List<Waypoint> waypoints = repository.getWaypoints(newWaypoint.getWorld());
+            final List<Waypoint> waypoints = repository.filterWaypoints(newWaypoint.getWorld());
             final Optional<Waypoint> duplicate = retrieveDuplicate(waypoints, newWaypoint.getName());
 
             if (duplicate.isPresent()) {

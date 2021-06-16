@@ -2,11 +2,13 @@ package com.lunarpatriots.waypoints;
 
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
+import com.lunarpatriots.waypoints.api.repository.impl.WaypointRepositoryImpl;
 import com.lunarpatriots.waypoints.commands.CleanCommand;
 import com.lunarpatriots.waypoints.commands.ImportCommand;
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.commands.WaypointsCommand;
 import com.lunarpatriots.waypoints.listener.ActivateWaypointListener;
+import com.lunarpatriots.waypoints.listener.DestroyWaypointListener;
 import com.lunarpatriots.waypoints.listener.SelectWaypointListener;
 import com.lunarpatriots.waypoints.listener.UseWaypointListener;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
@@ -70,7 +72,7 @@ public class MainApp extends JavaPlugin {
     public WaypointRepository loadDb() throws DatabaseException {
         LogUtil.info("Loading database...");
 
-        final WaypointRepository repository = new WaypointRepository(this);
+        final WaypointRepository repository = new WaypointRepositoryImpl(this);
         try {
             repository.initTable();
             return repository;
@@ -86,6 +88,7 @@ public class MainApp extends JavaPlugin {
         pluginManager.registerEvents(new ActivateWaypointListener(repository), this);
         pluginManager.registerEvents(new UseWaypointListener(this, repository), this);
         pluginManager.registerEvents(new SelectWaypointListener(repository), this);
+        pluginManager.registerEvents(new DestroyWaypointListener(repository),  this);
     }
 
     private void registerCommands(final WaypointRepository repository) {
@@ -96,3 +99,4 @@ public class MainApp extends JavaPlugin {
         this.getCommand("import").setExecutor(new ImportCommand(this, repository));
     }
 }
+

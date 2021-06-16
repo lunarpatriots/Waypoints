@@ -6,6 +6,7 @@ import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.enums.Region;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
+import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -63,9 +64,11 @@ public final class WaypointsCommand implements TabExecutor {
     private void listWaypoints(final String queryWorld,
                                final Player player,
                                final Region chosenRegion) throws DatabaseException {
-        final List<Waypoint> waypoints = repository.getWaypoints(queryWorld);
+        final List<Waypoint> waypoints = repository.filterWaypoints(queryWorld);
 
         if (waypoints.size() > 0) {
+            ValidatorUtil.removeInvalidWaypoints(waypoints, repository);
+
             final String waypointsString = waypoints.stream()
                 .map(Waypoint::getName)
                 .collect(Collectors.joining("\n -"));
