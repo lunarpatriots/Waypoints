@@ -19,7 +19,7 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class GuiUtil {
+public final class GuiUtil {
 
     private GuiUtil() {
     }
@@ -27,8 +27,10 @@ public class GuiUtil {
     public static Inventory initWaypointSelector(final MainApp plugin,
                                                  final List<Waypoint> waypoints,
                                                  final Player player) {
+        final int minSize = 9;
+
         final int size = waypoints.size();
-        final int inventorySize = size % 9 == 0 ? size : 9 * (size / 9 + 1);
+        final int inventorySize = size % minSize == 0 ? size : minSize * (size / minSize + 1);
 
         final Inventory selectionGui = Bukkit.createInventory(
             player,
@@ -51,13 +53,17 @@ public class GuiUtil {
 
         final ItemMeta itemDetails = selection.getItemMeta();
         itemDetails.setDisplayName(ChatColor.GREEN + waypoint.getName());
-        final Location location = new Location(player.getWorld(), waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        final Location location = new Location(
+            player.getWorld(),
+            waypoint.getXCoordinate(),
+            waypoint.getYCoordinate(),
+            waypoint.getZCoordinate());
 
         final List<String> meta = new ArrayList<>();
         meta.add(ChatColor.GRAY + "uuid: " + waypoint.getUuid());
-        meta.add(ChatColor.GRAY + "x: " + waypoint.getX());
-        meta.add(ChatColor.GRAY + "y: " + waypoint.getY());
-        meta.add(ChatColor.GRAY + "z: " + waypoint.getZ());
+        meta.add(ChatColor.GRAY + "x: " + waypoint.getXCoordinate());
+        meta.add(ChatColor.GRAY + "y: " + waypoint.getYCoordinate());
+        meta.add(ChatColor.GRAY + "z: " + waypoint.getZCoordinate());
         meta.add(ChatColor.GREEN + "cost: "
             + computeFastTravelCost(player, costPerBlock, minDistance, location) + " exp");
         itemDetails.setLore(meta);

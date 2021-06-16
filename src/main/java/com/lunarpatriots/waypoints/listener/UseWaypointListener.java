@@ -23,7 +23,7 @@ import java.util.Optional;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class UseWaypointListener implements Listener {
+public final class UseWaypointListener implements Listener {
 
     private final MainApp plugin;
     private final WaypointRepository repository;

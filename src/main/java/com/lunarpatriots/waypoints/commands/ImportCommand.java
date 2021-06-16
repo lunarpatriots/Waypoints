@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/15/2021
  */
-public class ImportCommand implements TabExecutor {
+public final class ImportCommand implements TabExecutor {
 
     private final MainApp plugin;
     private final WaypointRepository repository;
@@ -33,7 +33,7 @@ public class ImportCommand implements TabExecutor {
     @Override
     public boolean onCommand(final CommandSender commandSender,
                              final Command command,
-                             final String s,
+                             final String string,
                              final String[] strings) {
         final Player player = (Player) commandSender;
 
@@ -46,18 +46,7 @@ public class ImportCommand implements TabExecutor {
                 final List<Waypoint> waypoints = DataFileUtil.loadFromFile(plugin, filename);
                 final int newRecords = importRecords(waypoints);
 
-                if (newRecords > 0) {
-                    final int totalRecords = waypoints.size();
-                    if (newRecords == totalRecords) {
-                        MessageUtil.success(player, newRecords + " waypoints imported!");
-                    } else {
-                        final int diff = totalRecords - newRecords;
-
-                        MessageUtil.fail(player, String.format("%s/%s imported!", diff, totalRecords));
-                    }
-                } else {
-                    MessageUtil.fail(player, "No waypoints imported!");
-                }
+                showStatus(newRecords, waypoints.size(), player);
             } catch (final DataFileException ex) {
                 MessageUtil.fail(player, "Failed to load json file!");
             }
@@ -69,7 +58,7 @@ public class ImportCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender commandSender,
                                       final Command command,
-                                      final String s,
+                                      final String string,
                                       final String[] strings) {
         return null;
     }
@@ -86,5 +75,19 @@ public class ImportCommand implements TabExecutor {
         });
 
         return count.get();
+    }
+
+    private void showStatus(final int newRecords, final int totalRecords, final Player player) {
+        if (newRecords > 0) {
+            if (newRecords == totalRecords) {
+                MessageUtil.success(player, newRecords + " waypoints imported!");
+            } else {
+                final int diff = totalRecords - newRecords;
+
+                MessageUtil.fail(player, String.format("%s/%s imported!", diff, totalRecords));
+            }
+        } else {
+            MessageUtil.fail(player, "No waypoints imported!");
+        }
     }
 }

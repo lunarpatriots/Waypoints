@@ -17,18 +17,18 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/15/2021
  */
-public class WaypointRepository {
+public final class WaypointRepository {
 
-    final MainApp plugin;
+    private final MainApp plugin;
 
     public WaypointRepository(final MainApp plugin) {
         this.plugin = plugin;
     }
 
     public void initTable() throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
-                 .buildPreparedStatement(connection,SqlConstants.CREATE_TABLE_QUERY)) {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
+                 .buildPreparedStatement(connection, SqlConstants.CREATE_TABLE_QUERY)) {
 
             preparedStatement.executeUpdate();
         } catch (final SQLException ex) {
@@ -38,10 +38,10 @@ public class WaypointRepository {
     }
 
     public List<Waypoint> getWaypoints() throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
                  .buildPreparedStatement(connection, SqlConstants.GET_QUERY);
-             final ResultSet resultSet = preparedStatement.executeQuery()) {
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             return SqlUtil.readResult(resultSet);
         } catch (final SQLException ex) {
@@ -51,10 +51,10 @@ public class WaypointRepository {
     }
 
     public List<Waypoint> getWaypoints(final String world) throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
                 .buildPreparedStatement(connection, SqlConstants.GET_FILTERED_QUERY, world);
-             final ResultSet resultSet = preparedStatement.executeQuery()) {
+             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             return SqlUtil.readResult(resultSet);
         } catch (final SQLException ex) {
@@ -64,17 +64,9 @@ public class WaypointRepository {
     }
 
     public int saveWaypoint(final Waypoint waypoint) throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
-                 .buildPreparedStatement(
-                     connection,
-                     SqlConstants.INSERT_QUERY,
-                     waypoint.getUuid(),
-                     waypoint.getName(),
-                     waypoint.getWorld(),
-                     waypoint.getX(),
-                     waypoint.getY(),
-                     waypoint.getZ())) {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
+                 .buildPreparedStatement(connection, SqlConstants.INSERT_QUERY, waypoint)) {
 
             return preparedStatement.executeUpdate();
         } catch (final SQLException ex) {
@@ -84,14 +76,14 @@ public class WaypointRepository {
     }
 
     public int updateWaypoint(final Waypoint waypoint) throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
                  .buildPreparedStatement(
                      connection,
                      SqlConstants.UPDATE_QUERY,
-                     waypoint.getX(),
-                     waypoint.getY(),
-                     waypoint.getZ(),
+                     waypoint.getXCoordinate(),
+                     waypoint.getYCoordinate(),
+                     waypoint.getZCoordinate(),
                      waypoint.getUuid())) {
 
             return preparedStatement.executeUpdate();
@@ -102,8 +94,8 @@ public class WaypointRepository {
     }
 
     public int deleteWaypoint(final String uuid) throws DatabaseException {
-        try (final Connection connection = SqlUtil.getConnection(plugin);
-             final PreparedStatement preparedStatement = SqlUtil
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
                  .buildPreparedStatement(
                      connection,
                      SqlConstants.DELETE_QUERY,

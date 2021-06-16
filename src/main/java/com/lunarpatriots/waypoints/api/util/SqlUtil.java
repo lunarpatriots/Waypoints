@@ -21,7 +21,7 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/14/2021
  */
-public class SqlUtil {
+public final class SqlUtil {
 
     private SqlUtil() {
     }
@@ -75,18 +75,18 @@ public class SqlUtil {
      * Creates an instance of <code>PreparedStatement</code> with one parameter
      * @param connection Database connection
      * @param query SQL statement to be used
-     * @param param1 parameter at index 1 of type <code>String</code>
+     * @param stringParam Parameter at index 1 of type <code>String</code>
      * @return Instance of <code>PreparedStatement</code>
      * @throws DatabaseException - thrown when database access error occurs, statement is called on a closed connection,
      *  or there is an issue with the sql statement used
      */
     public static PreparedStatement buildPreparedStatement(final Connection connection,
                                                       final String query,
-                                                      final String param1) throws DatabaseException {
+                                                      final String stringParam) throws DatabaseException {
         try {
             final PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setString(1, param1);
+            statement.setString(1, stringParam);
 
             return statement;
         } catch (final SQLException ex) {
@@ -96,37 +96,27 @@ public class SqlUtil {
     }
 
     /**
-     * Creates an instance of <code>PreparedStatement</code> with 6 parameters
+     * Creates an instance of <code>PreparedStatement</code> with a <code>Waypoint</code> parameter
      * @param connection Database connection
      * @param query SQL statement to be used
-     * @param param1 Parameter at index 1 of type <code>String</code>
-     * @param param2 Parameter at index 2 of type <code>String</code>
-     * @param param3 Parameter at index 3 of type <code>String</code>
-     * @param param4 Parameter at index 4 of type <code>String</code>
-     * @param param5 Parameter at index 5 of type <code>String</code>
-     * @param param6 Parameter at index 6 of type <code>String</code>
+     * @param waypoint Instance of <code>Waypoint</code>
      * @return Instance of <code>PreparedStatement</code>
      * @throws DatabaseException Thrown when database access error occurs, statement is called on a closed connection,
      *  or there is an issue with the sql statement used
      */
     public static PreparedStatement buildPreparedStatement(final Connection connection,
                                                            final String query,
-                                                           final String param1,
-                                                           final String param2,
-                                                           final String param3,
-                                                           final int param4,
-                                                           final int param5,
-                                                           final int param6) throws DatabaseException {
+                                                           final Waypoint waypoint) throws DatabaseException {
 
         try {
             final PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setString(1, param1);
-            statement.setString(2, param2);
-            statement.setString(3, param3);
-            statement.setInt(4, param4);
-            statement.setInt(5, param5);
-            statement.setInt(6, param6);
+            statement.setString(1, waypoint.getUuid());
+            statement.setString(2, waypoint.getName());
+            statement.setString(3, waypoint.getWorld());
+            statement.setInt(4, waypoint.getXCoordinate());
+            statement.setInt(5, waypoint.getYCoordinate());
+            statement.setInt(6, waypoint.getZCoordinate());
 
             return statement;
         } catch (final SQLException ex) {
@@ -139,27 +129,27 @@ public class SqlUtil {
      * Creates an instance of <code>PreparedStatement</code> with 4 parameters.
      * @param connection Database connection
      * @param query SQL statement to be used
-     * @param param1 Parameter at index 1 of type <code>int</code>
-     * @param param2 Parameter at index 2 of type <code>int</code>
-     * @param param3 Parameter at index 3 of type <code>int</code>
-     * @param param4 Parameter at index 4 of type <code>String</code>
+     * @param firstIntParam Parameter at index 1 of type <code>int</code>
+     * @param secondIntParam Parameter at index 2 of type <code>int</code>
+     * @param thirdIntParma Parameter at index 3 of type <code>int</code>
+     * @param stringParam Parameter at index 4 of type <code>String</code>
      * @return Instance of <code>PreparedStatement</code>
      * @throws DatabaseException Thrown when database access error occurs, statement is called on a closed connection,
      *  or there is an issue with the sql statement used
      */
     public static PreparedStatement buildPreparedStatement(final Connection connection,
                                                             final String query,
-                                                            final int param1,
-                                                            final int param2,
-                                                            final int param3,
-                                                            final String param4) throws DatabaseException {
+                                                            final int firstIntParam,
+                                                            final int secondIntParam,
+                                                            final int thirdIntParma,
+                                                            final String stringParam) throws DatabaseException {
         try {
             final PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setInt(1, param1);
-            statement.setInt(2, param2);
-            statement.setInt(3, param3);
-            statement.setString(4, param4);
+            statement.setInt(1, firstIntParam);
+            statement.setInt(2, secondIntParam);
+            statement.setInt(3, thirdIntParma);
+            statement.setString(4, stringParam);
 
             return statement;
         } catch (final SQLException ex) {
@@ -170,14 +160,14 @@ public class SqlUtil {
 
     /**
      * Reads the <code>ResultSet</code> retrieved from query and converts it to a list of <code>Waypoint</code>
-     * @param resultSet <code>ResultSet</code> retrieved from SQL execution
+     * @param resultSet Instance of <code>ResultSet</code> retrieved from SQL execution
      * @return List of <code>Waypoint</code>
      * @throws DatabaseException Thrown when database access error occurs or <code>ResultSet</code> is closed
      */
     public static List<Waypoint> readResult(final ResultSet resultSet) throws DatabaseException {
         try {
             final List<Waypoint> waypoints = new ArrayList<>();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 final Waypoint waypoint = resultSetToObj(resultSet);
                 waypoints.add(waypoint);
             }
@@ -192,7 +182,7 @@ public class SqlUtil {
 
     /**
      * Converts an instance of <code>ResultSet</code> to a <code>Waypoint</code> object
-     * @param resultSet <code>ResultSet</code> row retrieved from database
+     * @param resultSet Instance of <code>ResultSet</code> retrieved from database
      * @return Instance of <code>Waypoint</code>
      * @throws DatabaseException Thrown when the column does not exist, database access error occurs,
      * or <code>ResultSet </code> is closed.
@@ -203,9 +193,9 @@ public class SqlUtil {
             waypoint.setUuid(resultSet.getString("uuid"));
             waypoint.setName(resultSet.getString("name"));
             waypoint.setWorld(resultSet.getString("world"));
-            waypoint.setX(resultSet.getInt("x_coordinate"));
-            waypoint.setY(resultSet.getInt("y_coordinate"));
-            waypoint.setZ(resultSet.getInt("z_coordinate"));
+            waypoint.setXCoordinate(resultSet.getInt("x_coordinate"));
+            waypoint.setYCoordinate(resultSet.getInt("y_coordinate"));
+            waypoint.setZCoordinate(resultSet.getInt("z_coordinate"));
 
             return waypoint;
         } catch (final SQLException ex) {

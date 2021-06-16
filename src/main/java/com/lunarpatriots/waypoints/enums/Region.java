@@ -40,10 +40,10 @@ public enum Region {
     }
 
     public static Region getRegion(final String keyword) throws RegionException {
-       return Arrays.stream(Region.values())
-           .filter(region -> region.keyword.equals(keyword))
-           .findFirst()
-           .orElseThrow(() -> new RegionException("Invalid region."));
+        return Arrays.stream(Region.values())
+            .filter(region -> region.keyword.equals(keyword))
+            .findFirst()
+            .orElseThrow(() -> new RegionException("Invalid region."));
     }
 
     public static Region getRegion(final Environment environment) throws RegionException {

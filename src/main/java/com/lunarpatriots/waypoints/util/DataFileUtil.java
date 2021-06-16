@@ -16,17 +16,18 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class DataFileUtil {
+public final class DataFileUtil {
 
     private DataFileUtil() {
     }
+
     public static List<Waypoint> loadFromFile(final MainApp plugin, final String filename)
         throws DataFileException {
 
         final File dataFile = getDataFile(plugin, filename);
         final Gson gson = new Gson();
 
-        try (final Reader fileReader = new FileReader(dataFile)) {
+        try (Reader fileReader = new FileReader(dataFile)) {
             final WaypointsList list = gson.fromJson(fileReader, WaypointsList.class);
             return list.getData();
         } catch (final IOException ex) {

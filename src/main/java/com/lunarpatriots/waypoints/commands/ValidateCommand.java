@@ -1,6 +1,5 @@
 package com.lunarpatriots.waypoints.commands;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
@@ -18,7 +17,7 @@ import java.util.List;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/12/2021
  */
-public class ValidateCommand implements TabExecutor {
+public final class ValidateCommand implements TabExecutor {
 
     private final WaypointRepository repository;
 
@@ -29,7 +28,7 @@ public class ValidateCommand implements TabExecutor {
     @Override
     public boolean onCommand(final CommandSender commandSender,
                              final Command command,
-                             final String s,
+                             final String string,
                              final String[] strings) {
         final Player player = (Player) commandSender;
 
@@ -57,7 +56,8 @@ public class ValidateCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender commandSender,
                                       final Command command,
-                                      final String s, final String[] strings) {
+                                      final String string,
+                                      final String[] strings) {
 
         return null;
     }

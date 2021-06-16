@@ -1,9 +1,9 @@
 package com.lunarpatriots.waypoints.listener;
 
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
-import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.constants.Constants;
+import com.lunarpatriots.waypoints.model.dto.WaypointDto;
 import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
@@ -22,14 +22,13 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class SelectWaypointListener implements Listener {
+public final class SelectWaypointListener implements Listener {
 
     private final WaypointRepository repository;
 
@@ -56,30 +55,28 @@ public class SelectWaypointListener implements Listener {
 
                 assert Optional.ofNullable(waypointInfo).isPresent();
 
-                final Waypoint waypoint = new Waypoint(player.getWorld().getName(), waypointInfo);
-                final int cost = Integer.parseInt(Objects.requireNonNull(waypointInfo.getLore())
-                    .get(4).split(" ")[1]);
+                final WaypointDto dto = new WaypointDto(player.getWorld().getName(), waypointInfo);
 
                 player.closeInventory();
-                teleportPlayer(player, waypoint, cost);
+                teleportPlayer(player, dto);
             }
         }
     }
 
-    private void teleportPlayer(final Player player, final Waypoint waypoint, final int cost) {
-        final Location targetLocation = waypoint.getLocation();
+    private void teleportPlayer(final Player player, final WaypointDto waypointDto) {
+        final Location targetLocation = waypointDto.getLocation();
         final Block targetBlock = targetLocation.getBlock();
+        final int cost = waypointDto.getCost();
 
         if (ValidatorUtil.isValidWaypointBlock(targetBlock)) {
-            if (ExpUtil.getPlayerExp(player) >= cost) {
-                MessageUtil.success(player, String.format("Fast travelling to %s...", waypoint.getName()));
+            if (ExpUtil.getPlayerExp(player) >= waypointDto.getCost()) {
+                MessageUtil.success(player, String.format("Fast travelling to %s...", waypointDto.getName()));
 
-                if (cost > 0) {
-                    ExpUtil.changePlayerExp(player, -cost);
-                }
+                ExpUtil.changePlayerExp(player, -cost);
 
                 final Location sourceLocation = player.getLocation();
-                player.spawnParticle(Particle.PORTAL, sourceLocation.add(0, 1, 0), 100);
+                final int particleCount = 100;
+                player.spawnParticle(Particle.PORTAL, sourceLocation.add(0, 1, 0), particleCount);
                 player.playSound(sourceLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.teleport(targetLocation);
             } else {
@@ -89,7 +86,7 @@ public class SelectWaypointListener implements Listener {
             MessageUtil.fail(player, "Fast travel point not found! Removing from list...");
 
             try {
-                repository.deleteWaypoint(waypoint.getUuid());
+                repository.deleteWaypoint(waypointDto.getUuid());
             } catch (final DatabaseException ex) {
                 LogUtil.error(ex.getMessage());
             }

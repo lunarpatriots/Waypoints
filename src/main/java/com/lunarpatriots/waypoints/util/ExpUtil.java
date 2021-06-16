@@ -6,35 +6,59 @@ import org.bukkit.entity.Player;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class ExpUtil {
+public final class ExpUtil {
 
     private ExpUtil() {
     }
 
     // Calculate amount of EXP needed to level up
-    private static int getExpToLevelUp(int level){
-        if(level <= 15){
-            return 2*level+7;
-        } else if(level <= 30){
-            return 5*level-38;
+    private static int getExpToLevelUp(final int level) {
+        final int firstLvlStep = 15;
+        final int secondLvlStep = 30;
+
+        final int expToLvlUp;
+        if (level <= firstLvlStep) {
+            final int secondLvlMultiplier = 2;
+            final int firstLvlOffset = 7;
+            expToLvlUp = secondLvlMultiplier * level + firstLvlOffset;
+        } else if (level <=  secondLvlStep) {
+            final int secondLvlMultiplier = 5;
+            final int secondLvlOffset = 38;
+            expToLvlUp = secondLvlMultiplier * level - secondLvlOffset;
         } else {
-            return 9*level-158;
+
+            final int thirdLvlMultiplier = 9;
+            final int thirdLvlOffset = 158;
+            expToLvlUp = thirdLvlMultiplier * level - thirdLvlOffset;
         }
+
+        return expToLvlUp;
     }
 
     // Calculate total experience up to a level
-    private static int getExpAtLevel(int level){
-        if(level <= 16){
-            return (int) (Math.pow(level,2) + 6*level);
-        } else if(level <= 31){
-            return (int) (2.5*Math.pow(level,2) - 40.5*level + 360.0);
+    private static int getExpAtLevel(final int level) {
+        final int firstLvlStep = 16;
+        final int secondLvlStep = 31;
+
+        final int currentExp;
+        if (level <= firstLvlStep) {
+            final int firstLvlOffset = 6 * level;
+            currentExp = (int) (Math.pow(level, 2) + firstLvlOffset);
+        } else if (level <= secondLvlStep) {
+            final double secondLvlMultiplier = 2.5;
+            final double secondLvlOffset = 40.5 * level + 360.0;
+            currentExp = (int) (secondLvlMultiplier * Math.pow(level, 2) - secondLvlOffset);
         } else {
-            return (int) (4.5*Math.pow(level,2) - 162.5*level + 2220.0);
+            final double thirdLvlMultiplier = 4.5;
+            final double thirdLvlOffset = 162.5 * level + 2220.0;
+            currentExp = (int) (thirdLvlMultiplier * Math.pow(level, 2) - thirdLvlOffset);
         }
+
+        return currentExp;
     }
 
     // Calculate player's current EXP amount
-    public static int getPlayerExp(Player player){
+    public static int getPlayerExp(final Player player) {
         final int level = player.getLevel();
         int exp = 0;
 
@@ -47,19 +71,18 @@ public class ExpUtil {
         return exp;
     }
 
-    public static int changePlayerExp(Player player, int exp) {
-        // Get player's current exp
-        final int currentExp = getPlayerExp(player);
+    public static void changePlayerExp(final Player player, final int exp) {
+        if (exp != 0) {
+            // Get player's current exp
+            final int currentExp = getPlayerExp(player);
 
-        // Reset player's current exp to 0
-        player.setExp(0);
-        player.setLevel(0);
+            // Reset player's current exp to 0
+            player.setExp(0);
+            player.setLevel(0);
 
-        // Give the player their exp back, with the difference
-        final int newExp = currentExp + exp;
-        player.giveExp(newExp);
-
-        // Return the player's new exp amount
-        return newExp;
+            // Give the player their exp back, with the difference
+            final int newExp = currentExp + exp;
+            player.giveExp(newExp);
+        }
     }
 }
