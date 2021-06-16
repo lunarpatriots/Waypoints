@@ -1,6 +1,5 @@
 package com.lunarpatriots.waypoints.commands;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/13/2021
  */
-public class CleanCommand implements TabExecutor {
+public final class CleanCommand implements TabExecutor {
 
     private final WaypointRepository repository;
 
@@ -30,7 +29,7 @@ public class CleanCommand implements TabExecutor {
     @Override
     public boolean onCommand(final CommandSender commandSender,
                              final Command command,
-                             final String s,
+                             final String string,
                              final String[] strings) {
         final Player player = (Player) commandSender;
 
@@ -42,7 +41,7 @@ public class CleanCommand implements TabExecutor {
                 .collect(Collectors.toList());
 
             if (!uuids.isEmpty()) {
-                for(final String uuid : uuids) {
+                for (final String uuid : uuids) {
                     repository.deleteWaypoint(uuid);
                 }
                 MessageUtil.success(player, String.format("Removed %s invalid waypoints.", uuids.size()));
@@ -59,7 +58,7 @@ public class CleanCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender commandSender,
                                       final Command command,
-                                      final String s,
+                                      final String string,
                                       final String[] strings) {
 
         return null;

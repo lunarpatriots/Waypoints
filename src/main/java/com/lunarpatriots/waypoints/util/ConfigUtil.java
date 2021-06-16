@@ -1,13 +1,14 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.lunarpatriots.waypoints.MainApp;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class ConfigUtil {
+public final class ConfigUtil {
 
     private ConfigUtil() {
     }
@@ -21,7 +22,7 @@ public class ConfigUtil {
     public static String getString(final MainApp plugin, final String key, final String defaultVal) {
         final FileConfiguration config = plugin.getConfig();
 
-        return config.getString(key, "");
+        return config.getString(key, StringUtils.EMPTY);
     }
 
     public static double getDouble(final MainApp plugin, final String key) {

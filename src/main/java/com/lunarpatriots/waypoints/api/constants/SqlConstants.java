@@ -4,7 +4,7 @@ package com.lunarpatriots.waypoints.api.constants;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/15/2021
  */
-public class SqlConstants {
+public final class SqlConstants {
 
     public static final String JDBC_DRIVER_CLASS_NAME = "org.sqlite.JDBC";
 

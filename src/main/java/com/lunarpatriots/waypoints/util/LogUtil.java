@@ -9,7 +9,7 @@ import java.util.logging.Level;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class LogUtil {
+public final class LogUtil {
 
     private LogUtil() {
     }

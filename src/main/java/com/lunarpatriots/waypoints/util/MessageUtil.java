@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class MessageUtil {
+public final class MessageUtil {
 
     private MessageUtil() {
     }

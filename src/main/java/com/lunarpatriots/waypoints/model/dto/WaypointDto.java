@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/12/2021
@@ -18,6 +21,8 @@ public class WaypointDto extends Waypoint {
 
     public WaypointDto(final String world, final ItemMeta waypointInfo) {
         super(world, waypointInfo);
-        this.cost = Integer.parseInt(waypointInfo.getLore().get(4).split(" ")[1]);
+        final List<String> lore = Objects.requireNonNull(waypointInfo.getLore());
+
+        this.cost = Integer.parseInt(lore.get(4).split(" ")[1]);
     }
 }

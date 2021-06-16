@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * Created By: theLANister Date created: 06/13/2021 Date Modified: 6/14/2021
  */
 
-public class WaypointsCommand implements TabExecutor {
+public final class WaypointsCommand implements TabExecutor {
 
     private final WaypointRepository repository;
 
@@ -32,7 +32,7 @@ public class WaypointsCommand implements TabExecutor {
     @Override
     public boolean onCommand(final CommandSender commandSender,
                              final Command command,
-                             final String s,
+                             final String string,
                              final String[] strings) {
         final Player player = (Player) commandSender;
 
@@ -85,7 +85,7 @@ public class WaypointsCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender commandSender,
                                       final Command command,
-                                      final String s,
+                                      final String string,
                                       final String[] strings) {
 
         return null;

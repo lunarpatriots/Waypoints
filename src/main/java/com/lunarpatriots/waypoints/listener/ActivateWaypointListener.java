@@ -1,6 +1,5 @@
 package com.lunarpatriots.waypoints.listener;
 
-import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
@@ -25,9 +24,9 @@ import java.util.UUID;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class ActivateWaypointListener implements Listener {
+public final class ActivateWaypointListener implements Listener {
 
-    public final WaypointRepository repository;
+    private final WaypointRepository repository;
 
     public ActivateWaypointListener(final WaypointRepository repository) {
         this.repository = repository;
@@ -85,7 +84,6 @@ public class ActivateWaypointListener implements Listener {
             LogUtil.error(ex.getMessage());
         }
     }
-
 
     private Optional<Waypoint> retrieveDuplicate(final List<Waypoint> waypoints, final String name) {
         return waypoints.stream()

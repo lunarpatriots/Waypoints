@@ -12,7 +12,7 @@ import java.util.Optional;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/09/2021
  */
-public class ValidatorUtil {
+public final class ValidatorUtil {
 
     private ValidatorUtil() {
     }
