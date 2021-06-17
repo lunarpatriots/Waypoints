@@ -13,23 +13,14 @@ public final class ExpUtil {
 
     // Calculate amount of EXP needed to level up
     private static int getExpToLevelUp(final int level) {
-        final int firstLvlStep = 15;
-        final int secondLvlStep = 30;
-
         final int expToLvlUp;
-        if (level <= firstLvlStep) {
-            final int secondLvlMultiplier = 2;
-            final int firstLvlOffset = 7;
-            expToLvlUp = secondLvlMultiplier * level + firstLvlOffset;
-        } else if (level <=  secondLvlStep) {
-            final int secondLvlMultiplier = 5;
-            final int secondLvlOffset = 38;
-            expToLvlUp = secondLvlMultiplier * level - secondLvlOffset;
-        } else {
 
-            final int thirdLvlMultiplier = 9;
-            final int thirdLvlOffset = 158;
-            expToLvlUp = thirdLvlMultiplier * level - thirdLvlOffset;
+        if (level <= 15) {
+            expToLvlUp = 2 * level + 7;
+        } else if (level <=  30) {
+            expToLvlUp = 5 * level - 38;
+        } else {
+            expToLvlUp = 9 * level - 158;
         }
 
         return expToLvlUp;
@@ -37,21 +28,14 @@ public final class ExpUtil {
 
     // Calculate total experience up to a level
     private static int getExpAtLevel(final int level) {
-        final int firstLvlStep = 16;
-        final int secondLvlStep = 31;
-
         final int currentExp;
-        if (level <= firstLvlStep) {
-            final int firstLvlOffset = 6 * level;
-            currentExp = (int) (Math.pow(level, 2) + firstLvlOffset);
-        } else if (level <= secondLvlStep) {
-            final double secondLvlMultiplier = 2.5;
-            final double secondLvlOffset = 40.5 * level + 360.0;
-            currentExp = (int) (secondLvlMultiplier * Math.pow(level, 2) - secondLvlOffset);
+
+        if (level <= 16) {
+            currentExp = (int) (Math.pow(level, 2) + 6 * level);
+        } else if (level <= 31) {
+            currentExp = (int) (2.5 * Math.pow(level, 2) - 40.5 * level + 360.0);
         } else {
-            final double thirdLvlMultiplier = 4.5;
-            final double thirdLvlOffset = 162.5 * level + 2220.0;
-            currentExp = (int) (thirdLvlMultiplier * Math.pow(level, 2) - thirdLvlOffset);
+            currentExp = (int) (4.5 * Math.pow(level, 2) - 162.5 * level + 2220.0);
         }
 
         return currentExp;

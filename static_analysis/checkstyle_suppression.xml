@@ -6,9 +6,9 @@
 
 <suppressions>
     <!-- Suppress these files because app needed them -->
-    <suppress checks="DesignForExtension" files="MainApp.java"/>
     <suppress checks="ClassDataAbstractionCoupling" files="MainApp.java"/>
     <suppress checks="MagicNumber" files="SqlUtil.java"/>
     <suppress checks="MagicNumber" files="Waypoint.java"/>
     <suppress checks="MagicNumber" files="WaypointDto.java"/>
+    <suppress checks="MagicNumber" files="ExpUtil.java"/>
 </suppressions>

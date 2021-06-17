@@ -26,7 +26,7 @@ import java.io.File;
  * Created By: lunarpatriots@gmail.com
  * Date created: 06/08/2021
  */
-public class MainApp extends JavaPlugin {
+public final class MainApp extends JavaPlugin {
 
     @Override
     public void onEnable() {
