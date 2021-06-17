@@ -14,6 +14,9 @@ import com.lunarpatriots.waypoints.listener.UseWaypointListener;
 import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -93,10 +96,15 @@ public class MainApp extends JavaPlugin {
 
     private void registerCommands(final WaypointRepository repository) {
         LogUtil.info("Registering commands...");
-        this.getCommand("validate").setExecutor(new ValidateCommand(repository));
-        this.getCommand("clean").setExecutor(new CleanCommand(repository));
-        this.getCommand("waypoints").setExecutor(new WaypointsCommand(repository));
-        this.getCommand("import").setExecutor(new ImportCommand(this, repository));
+
+        initCommand(this.getCommand("validate"), new ValidateCommand(repository));
+        initCommand(this.getCommand("clean"), new CleanCommand(repository));
+        initCommand(this.getCommand("import"), new ImportCommand(this, repository));
+        initCommand(this.getCommand("waypoints"), new WaypointsCommand(repository));
+    }
+
+    private void initCommand(final PluginCommand command, final CommandExecutor executor) {
+        command.setExecutor(executor);
+        command.setTabCompleter((TabCompleter) executor);
     }
 }
-
