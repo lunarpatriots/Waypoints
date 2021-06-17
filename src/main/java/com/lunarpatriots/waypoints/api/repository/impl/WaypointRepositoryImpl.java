@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Created By: tristan.hamili@novare.com.hk
+ * Created By: lunarpatriots@gmail.com
  * Date created: 06/16/2021
  */
 public final class WaypointRepositoryImpl implements WaypointRepository {

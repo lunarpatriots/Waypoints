@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -98,6 +99,10 @@ public final class WaypointsCommand implements TabExecutor {
     public List<String> onTabComplete(final CommandSender commandSender, final Command command, final String string,
             final String[] strings) {
 
-        return null;
+        return (strings.length == 1 && StringUtils.isBlank(strings[0]))
+            ? Arrays.stream(Region.values())
+                .map(Region::getKeyword)
+                .collect(Collectors.toList())
+            : null;
     }
 }
