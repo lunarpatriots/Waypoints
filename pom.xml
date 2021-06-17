@@ -7,7 +7,7 @@
     <groupId>com.lunarpatriots</groupId>
     <artifactId>waypoints</artifactId>
     <name>Waypoints</name>
-    <version>0.10.6-SNAPSHOT</version>
+    <version>0.10.7-SNAPSHOT</version>
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->
         <repository>
