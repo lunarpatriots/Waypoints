@@ -81,7 +81,7 @@ public final class SelectWaypointListener implements Listener {
                 player.playSound(targetLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.teleport(targetLocation);
             } else {
-                MessageUtil.fail(player, "You do not have enough exp to fast travel to that location!");
+                MessageUtil.fail(player, "You do not have enough levels to fast travel to that location!");
             }
         } else {
             MessageUtil.fail(player, "Fast travel point not found! Removing from list...");
