@@ -2,10 +2,10 @@ version: ${modified.version}
 
 # MAIN PLUGIN CONFIG FILE
 # =========================
-# exp-per-block: 0.1 - Exp cost per block
-# min-distance: 100 - If the total distance to be traveled is less than or equal to the value set here, no exp will be deducted
 # filename: waypoints.db - File to load for SQLite
-filename: waypoints.db
-exp-per-block: 0.1
-min-distance: 100
+# rate: 1 - Base cost of fast travelling
+# distance - 500 - How many blocks the rate represents
 
+filename: waypoints.db
+rate: 1
+distance: 500

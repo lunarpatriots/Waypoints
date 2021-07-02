@@ -4,7 +4,6 @@ import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.constants.Constants;
 import com.lunarpatriots.waypoints.model.dto.WaypointDto;
-import com.lunarpatriots.waypoints.util.ExpUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
@@ -69,10 +68,11 @@ public final class SelectWaypointListener implements Listener {
         final int cost = waypointDto.getCost();
 
         if (ValidatorUtil.isValidWaypointBlock(targetBlock)) {
-            if (ExpUtil.getPlayerExp(player) >= waypointDto.getCost()) {
+            final int currentLevel = player.getLevel();
+            if (player.getLevel() >= waypointDto.getCost()) {
                 MessageUtil.success(player, String.format("Fast travelling to %s...", waypointDto.getName()));
 
-                ExpUtil.changePlayerExp(player, -cost);
+                player.setLevel(currentLevel - cost);
 
                 final Location sourceLocation = player.getLocation();
                 final int particleCount = 100;
