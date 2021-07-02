@@ -48,9 +48,9 @@ public final class GuiUtil {
                                                      final Player player,
                                                      final MainApp plugin) {
         final ItemStack selection = new ItemStack(Material.FILLED_MAP);
-        final double costPerBlock = ConfigUtil.getDouble(plugin, "exp-per-block");
-        final int minDistance = ConfigUtil.getInt(plugin, "min-distance");
 
+        final int baseCost = ConfigUtil.getInt(plugin, "rate");
+        final int distance = ConfigUtil.getInt(plugin, "distance");
         final ItemMeta itemDetails = selection.getItemMeta();
         itemDetails.setDisplayName(ChatColor.GREEN + waypoint.getName());
         final Location location = new Location(
@@ -65,7 +65,7 @@ public final class GuiUtil {
         meta.add(ChatColor.GRAY + "y: " + waypoint.getYCoordinate());
         meta.add(ChatColor.GRAY + "z: " + waypoint.getZCoordinate());
         meta.add(ChatColor.GREEN + "cost: "
-            + computeFastTravelCost(player, costPerBlock, minDistance, location) + " exp");
+            + computeFastTravelCost(player, baseCost, distance, location) + " level(s)");
         itemDetails.setLore(meta);
         selection.setItemMeta(itemDetails);
 
@@ -73,12 +73,12 @@ public final class GuiUtil {
     }
 
     private static int computeFastTravelCost(final Player player,
-                                             final double costPerBlock,
-                                             final int minBlockDistance,
+                                             final int baseCost,
+                                             final int distance,
                                              final Location destination) {
         final Location playerLocation = player.getLocation();
-        final int distance = (int) Math.round(playerLocation.distance(destination));
+        final int travelDistance = (int) Math.round(playerLocation.distance(destination));
 
-        return (int) Math.round(distance <= minBlockDistance ? 0 : (distance - minBlockDistance) * costPerBlock);
+        return travelDistance < distance ? 0 : travelDistance / distance * baseCost;
     }
 }

@@ -5,8 +5,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/graphs/contributors)
 [![License](https://img.shields.io/github/license/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/blob/develop/LICENSE)
 
-Create RPG-style fast travel waypoints for your server in minecraft! To prevent player abuse,
-an exp cost penalty is enforced. The further the distance traveled, the higher the exp cost.
+Create RPG-style fast travel waypoints for your server in minecraft!
 
 ## Main Features
 - Waypoints can be created using any Sign, with the following conditions:
@@ -16,7 +15,7 @@ an exp cost penalty is enforced. The further the distance traveled, the higher t
 - Right-clicking on an activated waypoint brings up a menu in which you can select another existing waypoint to fast travel to.
 - Waypoints are accessible only in the world it is created in (you can't fast travel to a nether waypoint in the nether, etc.)
 - An option to not penalize players who use the waypoint to travel within a short distance is also available
-- Exp cost per block, and the max distance for free travelling is configurable
+- Fast travelling costs levels, depending on how far the destination is.
 - Uses database to store waypoint data
 
 ## Project Dependencies
