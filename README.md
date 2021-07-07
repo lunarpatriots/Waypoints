@@ -1,5 +1,6 @@
 # Waypoints
-![GitHub workflow status](https://img.shields.io/github/workflow/status/lunarpatriots/Waypoints/Build/develop?logo=github)
+[![GitHub Release](https://img.shields.io/github/release/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/releases)
+![GitHub workflow status](https://img.shields.io/github/workflow/status/lunarpatriots/Waypoints/Build/master?logo=github)
 [![GitHub last commit](https://img.shields.io/github/last-commit/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/commits/develop)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints)
 [![GitHub contributors](https://img.shields.io/github/contributors/lunarpatriots/Waypoints.svg?logo=github)](https://github.com/lunarpatriots/Waypoints/graphs/contributors)
@@ -20,9 +21,9 @@ Create RPG-style fast travel waypoints for your server in minecraft!
 
 ## Project Dependencies
 Dependencies can be found in the `pom.xml`.
-- [Java 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - A high-level, class-based, object-oriented programming language
+- [Java 16](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) - A high-level, class-based, object-oriented programming language
 - [Maven](https://maven.apache.org/download.cgi) - Build automation tool primarily used for Java projects
-- [Spigot 1.16.5](https://www.spigotmc.org/wiki/spigot-maven/) - A Minecraft Server API
+- [Spigot 1.17](https://www.spigotmc.org/wiki/spigot-maven/) - A Minecraft Server API
 - [Lombok](https://projectlombok.org/) - Java library tool used to reduce boilerplate code for model/data objects
 - [SQLite](https://www.sqlite.org/about.html) - Library that implements a self-contained, zero-configuration, transactional SQL database engine
 
