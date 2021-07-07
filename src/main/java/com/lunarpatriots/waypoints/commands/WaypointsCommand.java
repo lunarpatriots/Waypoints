@@ -69,32 +69,6 @@ public final class WaypointsCommand implements TabExecutor {
         return true;
     }
 
-    private void listWaypoints(final String queryWorld, final Player player, final Region chosenRegion)
-            throws DatabaseException {
-        final List<Waypoint> waypoints = Optional.ofNullable(chosenRegion).isPresent()
-                ? repository.filterWaypoints(queryWorld)
-                : repository.getWaypoints();
-
-        if (waypoints.size() > 0) {
-            final String region = Optional.ofNullable(chosenRegion).isPresent() ? chosenRegion.getDisplayValue()
-                    : "All";
-
-            ValidatorUtil.removeInvalidWaypoints(waypoints, repository);
-
-            final String waypointsString = waypoints.stream().map(Waypoint::getName)
-                    .collect(Collectors.joining("\n- "));
-
-            final String msg = String.format("%s %sWaypoints:\n- %s", region, ChatColor.GREEN, waypointsString);
-            MessageUtil.success(player, msg);
-        } else {
-            final String errorMsg = Optional.ofNullable(chosenRegion).isPresent()
-                    ? "There are no waypoints in " + chosenRegion.getKeyword() + " region!"
-                    : "There are no current waypoints in this world!";
-
-            MessageUtil.fail(player, errorMsg);
-        }
-    }
-
     @Override
     public List<String> onTabComplete(final CommandSender commandSender, final Command command, final String string,
             final String[] strings) {
@@ -104,5 +78,48 @@ public final class WaypointsCommand implements TabExecutor {
                 .map(Region::getKeyword)
                 .collect(Collectors.toList())
             : null;
+    }
+
+    private void listWaypoints(final String queryWorld, final Player player, final Region chosenRegion)
+        throws DatabaseException {
+        final List<Waypoint> waypoints = Optional.ofNullable(chosenRegion).isPresent()
+            ? repository.filterWaypoints(queryWorld)
+            : repository.getWaypoints();
+
+        if (waypoints.size() > 0) {
+            final String region = Optional.ofNullable(chosenRegion).isPresent() ? chosenRegion.getDisplayValue()
+                : "All";
+
+            removeInvalidWaypoints(waypoints, repository);
+
+            final String waypointsString = waypoints.stream().map(Waypoint::getName)
+                .collect(Collectors.joining("\n- "));
+
+            final String msg = String.format("%s %sWaypoints:\n- %s", region, ChatColor.GREEN, waypointsString);
+            MessageUtil.success(player, msg);
+        } else {
+            final String errorMsg = Optional.ofNullable(chosenRegion).isPresent()
+                ? "There are no waypoints in " + chosenRegion.getKeyword() + " region!"
+                : "There are no current waypoints in this world!";
+
+            MessageUtil.fail(player, errorMsg);
+        }
+    }
+
+    private void removeInvalidWaypoints(final List<Waypoint> waypoints, final WaypointRepository repository) {
+        final List<String> invalidUuids = waypoints.stream()
+            .filter(waypoint -> !ValidatorUtil.isValidWaypointBlock(waypoint.getLocation().getBlock()))
+            .map(Waypoint::getUuid)
+            .collect(Collectors.toList());
+
+        if (invalidUuids.size() > 0) {
+            try {
+                for (final String uuid : invalidUuids) {
+                    repository.deleteWaypoint(uuid);
+                }
+            } catch (final Exception ex) {
+                LogUtil.error(ex.getMessage());
+            }
+        }
     }
 }
