@@ -1,11 +1,14 @@
 package com.lunarpatriots.waypoints.util;
 
+import com.lunarpatriots.waypoints.MainApp;
+import com.lunarpatriots.waypoints.api.model.Waypoint;
 import com.lunarpatriots.waypoints.constants.Constants;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,4 +31,21 @@ public final class ValidatorUtil {
             && Constants.WAYPOINT_PREFIX.equals(((Sign) targetBlock.getState()).getLine(0))
             && StringUtils.isNotBlank(((Sign) targetBlock.getState()).getLine(1));
     }
+
+    public static boolean isGlobalEnabled(final MainApp plugin) {
+        return ConfigUtil.getBoolean(plugin, "global-waypoints");
+    }
+
+    public static Optional<Waypoint> getDuplicate(final List<Waypoint> waypoints,
+                                                  final String waypointName) {
+        return waypoints.stream()
+            .filter(waypoint -> waypointName.equals(waypoint.getName()))
+            .findFirst();
+    }
+
+    public static boolean isActivatedForPlayer(final MainApp plugin,
+                                               final List<Waypoint> playerWaypoints,
+                                               final String waypointName) {
+        return isGlobalEnabled(plugin) || getDuplicate(playerWaypoints, waypointName).isPresent();
+    }e
 }

@@ -7,6 +7,7 @@ import com.lunarpatriots.waypoints.model.dto.WaypointDto;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -76,6 +77,7 @@ public final class SelectWaypointListener implements Listener {
 
                 playAnimations(player, targetLocation);
 
+                Bukkit.getServer().getWorld(waypointDto.getWorld()).loadChunk(targetLocation.getChunk());
                 player.setInvulnerable(true);
                 player.teleport(targetLocation);
                 player.setInvulnerable(false);

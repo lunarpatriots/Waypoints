@@ -36,7 +36,7 @@ public final class SqlUtil {
     public static Connection getConnection(final MainApp plugin) throws DatabaseException {
         try {
             Class.forName(SqlConstants.JDBC_DRIVER_CLASS_NAME);
-            final String filename = plugin.getConfig().getString("filename");
+            final String filename = "waypoints.db";
             final File dbFile = DataFileUtil.getDataFile(plugin, filename);
 
             return DriverManager.getConnection(String.format(SqlConstants.URL, dbFile));
@@ -87,6 +87,61 @@ public final class SqlUtil {
             final PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setString(1, stringParam);
+
+            return statement;
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Creates an instance of <code>PreparedStatement</code> with two parameters
+     * @param connection Database connection
+     * @param query SQL statement to be used
+     * @param userUuid Parameter at index 1 of type <code>String</code>
+     * @param world Parameter at index 2 of type <code>String</code>
+     * @return Instance of <code>PreparedStatement</code>
+     * @throws DatabaseException - thrown when database access error occurs, statement is called on a closed connection,
+     *  or there is an issue with the sql statement used
+     */
+    public static PreparedStatement buildPreparedStatement(final Connection connection,
+                                                           final String query,
+                                                           final String userUuid,
+                                                           final String world) throws DatabaseException {
+        try {
+            final PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userUuid);
+            statement.setString(2, world);
+
+            return statement;
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Creates an instance of <code>PreparedStatement</code> wtih five parameters
+     * @param connection Database connection
+     * @param query SQL statement to be used
+     * @param uuid Parameter at index 1 of type <code>String</code>
+     * @param userUuid Parameter at index 2 of type <code>String</code>
+     * @param waypointUuid Parameter at index 3 of type <code>String</code>
+     * @return Instance of <code>PreparedStatement</code>
+     * @throws DatabaseException - thrown when database access error occurs, statement is called on a closed connection,
+     *  or there is an issue with the sql statement used
+     */
+    public static PreparedStatement buildPreparedStatement(final Connection connection,
+                                                           final String query,
+                                                           final String uuid,
+                                                           final String userUuid,
+                                                           final String waypointUuid) throws DatabaseException {
+        try {
+            final PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, uuid);
+            statement.setString(2, userUuid);
+            statement.setString(3, waypointUuid);
 
             return statement;
         } catch (final SQLException ex) {

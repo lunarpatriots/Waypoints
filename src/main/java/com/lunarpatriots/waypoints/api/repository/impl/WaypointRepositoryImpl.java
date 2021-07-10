@@ -27,10 +27,10 @@ public final class WaypointRepositoryImpl implements WaypointRepository {
     }
 
     @Override
-    public void initTable() throws DatabaseException {
+    public void initTable(final String query) throws DatabaseException {
         try (Connection connection = SqlUtil.getConnection(plugin);
              PreparedStatement preparedStatement = SqlUtil
-                 .buildPreparedStatement(connection, SqlConstants.CREATE_TABLE_QUERY)) {
+                 .buildPreparedStatement(connection, query)) {
 
             preparedStatement.executeUpdate();
         } catch (final SQLException ex) {
@@ -68,10 +68,39 @@ public final class WaypointRepositoryImpl implements WaypointRepository {
     }
 
     @Override
+    public List<Waypoint> filterWaypointsPerPlayer(final String userUuid, final String world) throws DatabaseException {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
+                 .buildPreparedStatement(connection, SqlConstants.GET_FILTERERD_PER_PLAYER_QUERY, userUuid, world);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            return SqlUtil.readResult(resultSet);
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
     public int saveWaypoint(final Waypoint waypoint) throws DatabaseException {
         try (Connection connection = SqlUtil.getConnection(plugin);
              PreparedStatement preparedStatement = SqlUtil
                  .buildPreparedStatement(connection, SqlConstants.INSERT_QUERY, waypoint)) {
+
+            return preparedStatement.executeUpdate();
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public int saveReference(final String uuid,
+                             final String userUuid,
+                             final String waypointUuid) throws DatabaseException {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil.buildPreparedStatement(
+                 connection, SqlConstants.CREATE_REFERENCE_QUERY, uuid, userUuid, waypointUuid)) {
 
             return preparedStatement.executeUpdate();
         } catch (final SQLException ex) {
