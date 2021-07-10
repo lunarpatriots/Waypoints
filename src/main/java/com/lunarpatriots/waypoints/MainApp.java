@@ -1,5 +1,6 @@
 package com.lunarpatriots.waypoints;
 
+import com.lunarpatriots.waypoints.api.constants.SqlConstants;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.api.repository.impl.WaypointRepositoryImpl;
@@ -77,7 +78,12 @@ public final class MainApp extends JavaPlugin {
 
         final WaypointRepository repository = new WaypointRepositoryImpl(this);
         try {
-            repository.initTable();
+            repository.initTable(SqlConstants.CREATE_WAYPOINTS_TABLE_QUERY);
+
+            if (!ConfigUtil.getBoolean(this, "global-waypoints")) {
+                repository.initTable(SqlConstants.CREATE_USERS_TABLE_QUERY);
+            }
+
             return repository;
         } catch (final DatabaseException ex) {
             LogUtil.error("Failed to initialize table.");
@@ -88,7 +94,7 @@ public final class MainApp extends JavaPlugin {
     private void registerEvents(final WaypointRepository repository) {
         LogUtil.info("Registering events...");
         final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
-        pluginManager.registerEvents(new ActivateWaypointListener(repository), this);
+        pluginManager.registerEvents(new ActivateWaypointListener(this, repository), this);
         pluginManager.registerEvents(new UseWaypointListener(this, repository), this);
         pluginManager.registerEvents(new SelectWaypointListener(repository), this);
         pluginManager.registerEvents(new DestroyWaypointListener(repository),  this);

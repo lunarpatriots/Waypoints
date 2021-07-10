@@ -1,7 +1,7 @@
 package com.lunarpatriots.waypoints.util;
 
+import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.api.model.Waypoint;
-import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.constants.Constants;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Tag;
@@ -10,7 +10,6 @@ import org.bukkit.block.Sign;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created By: lunarpatriots@gmail.com
@@ -33,20 +32,20 @@ public final class ValidatorUtil {
             && StringUtils.isNotBlank(((Sign) targetBlock.getState()).getLine(1));
     }
 
-    public static void removeInvalidWaypoints(final List<Waypoint> waypoints, final WaypointRepository repository) {
-        final List<String> invalidUuids = waypoints.stream()
-            .filter(waypoint -> !isValidWaypointBlock(waypoint.getLocation().getBlock()))
-            .map(Waypoint::getUuid)
-            .collect(Collectors.toList());
+    public static boolean isGlobalEnabled(final MainApp plugin) {
+        return ConfigUtil.getBoolean(plugin, "global-waypoints");
+    }
 
-        if (invalidUuids.size() > 0) {
-            try {
-                for (final String uuid : invalidUuids) {
-                    repository.deleteWaypoint(uuid);
-                }
-            } catch (final Exception ex) {
-                LogUtil.error(ex.getMessage());
-            }
-        }
+    public static Optional<Waypoint> getDuplicate(final List<Waypoint> waypoints,
+                                                  final String waypointName) {
+        return waypoints.stream()
+            .filter(waypoint -> waypointName.equalsIgnoreCase(waypoint.getName()))
+            .findFirst();
+    }
+
+    public static boolean isActivatedForPlayer(final MainApp plugin,
+                                               final List<Waypoint> playerWaypoints,
+                                               final String waypointName) {
+        return isGlobalEnabled(plugin) || getDuplicate(playerWaypoints, waypointName).isPresent();
     }
 }

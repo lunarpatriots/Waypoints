@@ -11,13 +11,17 @@ import java.util.List;
  */
 public interface WaypointRepository {
 
-    void initTable() throws DatabaseException;
+    void initTable(String query) throws DatabaseException;
 
     List<Waypoint> getWaypoints() throws DatabaseException;
 
     List<Waypoint> filterWaypoints(String world) throws DatabaseException;
 
+    List<Waypoint> filterWaypointsPerPlayer(String userUuid, String world) throws DatabaseException;
+
     int saveWaypoint(Waypoint waypoint) throws DatabaseException;
+
+    int saveReference(String uuid, String userUuid, String waypointUuid) throws DatabaseException;
 
     int updateWaypoint(Waypoint waypoint) throws DatabaseException;
 

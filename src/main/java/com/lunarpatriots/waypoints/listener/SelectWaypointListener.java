@@ -73,12 +73,7 @@ public final class SelectWaypointListener implements Listener {
                 MessageUtil.success(player, String.format("Fast travelling to %s...", waypointDto.getName()));
 
                 player.setLevel(currentLevel - cost);
-
-                final Location sourceLocation = player.getLocation();
-                final int particleCount = 100;
-                player.spawnParticle(Particle.PORTAL, sourceLocation.add(0, 1, 0), particleCount);
-                player.playSound(sourceLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-                player.playSound(targetLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+                playAnimations(player, targetLocation);
                 player.teleport(targetLocation);
             } else {
                 MessageUtil.fail(player, "You do not have enough levels to fast travel to that location!");
@@ -92,5 +87,14 @@ public final class SelectWaypointListener implements Listener {
                 LogUtil.error(ex.getMessage());
             }
         }
+    }
+
+    private void playAnimations(final Player player, final Location targetLocation) {
+        final int particleCount = 100;
+        final Location sourceLocation = player.getLocation();
+
+        player.spawnParticle(Particle.PORTAL, sourceLocation.add(0, 1, 0), particleCount);
+        player.playSound(sourceLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+        player.playSound(targetLocation, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
     }
 }

@@ -45,8 +45,9 @@ public final class UseWaypointListener implements Listener {
             final Waypoint interactedWaypoint = new Waypoint(player.getWorld().getName(), sign);
 
             try {
-                final List<Waypoint> waypoints = repository.filterWaypoints(interactedWaypoint.getWorld());
-                ValidatorUtil.removeInvalidWaypoints(waypoints, repository);
+                final List<Waypoint> waypoints = ValidatorUtil.isGlobalEnabled(plugin)
+                    ? repository.filterWaypoints(interactedWaypoint.getWorld())
+                    : repository.filterWaypointsPerPlayer(player.getUniqueId().toString(), player.getWorld().getName());
 
                 if (isActivated(waypoints, interactedWaypoint)) {
                     waypoints.removeIf(waypoint -> interactedWaypoint.getName().equals(waypoint.getName()));
