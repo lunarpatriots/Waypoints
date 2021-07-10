@@ -6,6 +6,7 @@ import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -50,7 +51,7 @@ public final class DestroyWaypointListener implements Listener {
             final Waypoint waypoint = new Waypoint(targetBlock.getWorld().getName(), sign);
 
             try {
-                final String uuid = existingUuid(waypoint.getName());
+                final String uuid = getExistingUuid(waypoint);
 
                 if (StringUtils.isNotBlank(uuid)) {
                     repository.deleteWaypoint(uuid);
@@ -61,10 +62,15 @@ public final class DestroyWaypointListener implements Listener {
         }
     }
 
-    private String existingUuid(final String name) throws DatabaseException {
+    private String getExistingUuid(final Waypoint waypoint) throws DatabaseException {
+        final String name = waypoint.getName();
+        final Location location = waypoint.getLocation();
+        final String world = waypoint.getWorld();
+
         final List<Waypoint> waypoints = repository.getWaypoints();
         return waypoints.stream()
-            .filter(waypoint -> name.equals(waypoint.getName()))
+            .filter(existing -> name.equals(existing.getName())
+                && location.equals(existing.getLocation()) && world.equals(existing.getWorld()))
             .findFirst()
             .map(Waypoint::getUuid)
             .orElse(null);

@@ -73,12 +73,8 @@ public final class SelectWaypointListener implements Listener {
                 MessageUtil.success(player, String.format("Fast travelling to %s...", waypointDto.getName()));
 
                 player.setLevel(currentLevel - cost);
-
                 playAnimations(player, targetLocation);
-
-                player.setInvulnerable(true);
                 player.teleport(targetLocation);
-                player.setInvulnerable(false);
             } else {
                 MessageUtil.fail(player, "You do not have enough levels to fast travel to that location!");
             }

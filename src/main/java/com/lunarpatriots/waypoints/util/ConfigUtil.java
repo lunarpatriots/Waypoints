@@ -1,7 +1,6 @@
 package com.lunarpatriots.waypoints.util;
 
 import com.lunarpatriots.waypoints.MainApp;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -22,12 +21,12 @@ public final class ConfigUtil {
     public static String getString(final MainApp plugin, final String key, final String defaultVal) {
         final FileConfiguration config = plugin.getConfig();
 
-        return config.getString(key, StringUtils.EMPTY);
+        return config.getString(key, defaultVal);
     }
 
-    public static double getDouble(final MainApp plugin, final String key) {
+    public static boolean getBoolean(final MainApp plugin, final String key) {
         final FileConfiguration config = plugin.getConfig();
 
-        return config.getDouble(key);
+        return config.getBoolean(key, true);
     }
 }

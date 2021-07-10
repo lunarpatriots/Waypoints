@@ -1,11 +1,11 @@
+# This refers to the plugin version. Do not change this or else you might encounter issues
 version: ${modified.version}
 
-# MAIN PLUGIN CONFIG FILE
-# =========================
-# filename: waypoints.db - File to load for SQLite
-# rate: 1 - Base cost of fast travelling
-# distance - 500 - How many blocks the rate represents
-
-filename: waypoints.db
+# This is the base cost of using a waypoint
 rate: 1
+
+# This refers to how many blocks the rate represents
 distance: 500
+
+# This refers to if activated waypoints are available to all players or to whoever activated it only
+global-waypoints: false
