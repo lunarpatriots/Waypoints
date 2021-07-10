@@ -39,7 +39,7 @@ public final class ValidatorUtil {
     public static Optional<Waypoint> getDuplicate(final List<Waypoint> waypoints,
                                                   final String waypointName) {
         return waypoints.stream()
-            .filter(waypoint -> waypointName.equals(waypoint.getName()))
+            .filter(waypoint -> waypointName.equalsIgnoreCase(waypoint.getName()))
             .findFirst();
     }
 
@@ -47,5 +47,5 @@ public final class ValidatorUtil {
                                                final List<Waypoint> playerWaypoints,
                                                final String waypointName) {
         return isGlobalEnabled(plugin) || getDuplicate(playerWaypoints, waypointName).isPresent();
-    }e
+    }
 }

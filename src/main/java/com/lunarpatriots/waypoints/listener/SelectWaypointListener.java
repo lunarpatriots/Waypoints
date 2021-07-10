@@ -7,7 +7,6 @@ import com.lunarpatriots.waypoints.model.dto.WaypointDto;
 import com.lunarpatriots.waypoints.util.LogUtil;
 import com.lunarpatriots.waypoints.util.MessageUtil;
 import com.lunarpatriots.waypoints.util.ValidatorUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -74,13 +73,8 @@ public final class SelectWaypointListener implements Listener {
                 MessageUtil.success(player, String.format("Fast travelling to %s...", waypointDto.getName()));
 
                 player.setLevel(currentLevel - cost);
-
                 playAnimations(player, targetLocation);
-
-                Bukkit.getServer().getWorld(waypointDto.getWorld()).loadChunk(targetLocation.getChunk());
-                player.setInvulnerable(true);
                 player.teleport(targetLocation);
-                player.setInvulnerable(false);
             } else {
                 MessageUtil.fail(player, "You do not have enough levels to fast travel to that location!");
             }

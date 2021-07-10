@@ -62,8 +62,23 @@ public final class ActivateWaypointListener implements Listener {
             final Optional<Waypoint> duplicate = ValidatorUtil.getDuplicate(waypoints, newWaypoint.getName());
             final String playerUuid = player.getUniqueId().toString();
 
+            final List<Waypoint> playerWaypoints = ValidatorUtil.isGlobalEnabled(plugin)
+                ? null
+                : repository.filterWaypointsPerPlayer(player.getUniqueId().toString(),
+                player.getWorld().getName());
+
             if (duplicate.isPresent()) {
-                handleDuplicate(player, duplicate.get(), newWaypoint);
+                final Waypoint dupWaypoint = duplicate.get();
+                final Block dupBlock = dupWaypoint.getLocation().getBlock();
+
+                if (ValidatorUtil.isValidWaypointBlock(dupBlock)) {
+                    handleDuplicate(player, dupWaypoint, newWaypoint, playerWaypoints);
+                } else {
+                    newWaypoint.setUuid(dupWaypoint.getUuid());
+                    repository.updateWaypoint(newWaypoint);
+
+                    saveWaypointReference(playerWaypoints, dupWaypoint, player);
+                }
             } else {
                 final String waypointUuid = UUID.randomUUID().toString();
                 newWaypoint.setUuid(waypointUuid);
@@ -76,42 +91,43 @@ public final class ActivateWaypointListener implements Listener {
         }
     }
 
-    private void handleDuplicate(final Player player, final Waypoint duplicateWaypoint, final Waypoint newWaypoint)
+    private void handleDuplicate(final Player player,
+                                 final Waypoint duplicateWaypoint,
+                                 final Waypoint newWaypoint,
+                                 final List<Waypoint> playerWaypoints)
             throws DatabaseException {
 
-        final List<Waypoint> playerWaypoints = ValidatorUtil.isGlobalEnabled(plugin)
-            ? null
-            : repository.filterWaypointsPerPlayer(player.getUniqueId().toString(),
-            player.getWorld().getName());
         final Block duplicateBlock = duplicateWaypoint.getLocation().getBlock();
 
-        final String waypointUuid = duplicateWaypoint.getUuid();
-        final String playerUuid = player.getUniqueId().toString();
-
         if (ValidatorUtil.isValidWaypointBlock(duplicateBlock)) {
-            if (ValidatorUtil.isActivatedForPlayer(plugin, playerWaypoints, duplicateWaypoint.getName())) {
-                final String msg = duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())
-                    ? "Waypoint already activated!"
-                    : String.format("A waypoint with the name %s already exists!"
-                        + " Please set a different waypoint name.",
-                    newWaypoint.getName());
-
-                MessageUtil.fail(player, msg);
+            if (duplicateWaypoint.getLocation().equals(newWaypoint.getLocation())) {
+                saveWaypointReference(playerWaypoints, duplicateWaypoint, player);
             } else {
-                repository.saveReference(UUID.randomUUID().toString(), playerUuid, duplicateWaypoint.getUuid());
-                MessageUtil.success(player, "New waypoint activated!");
+                final String message = String.format(
+                    "A waypoint with the name %s already exists! Please set a different waypoint name.",
+                    newWaypoint.getName());
+                MessageUtil.fail(player, message);
             }
         } else {
+            final String waypointUuid = duplicateWaypoint.getUuid();
             newWaypoint.setUuid(waypointUuid);
             repository.updateWaypoint(newWaypoint);
 
-            if (!ValidatorUtil.isActivatedForPlayer(plugin, playerWaypoints, duplicateWaypoint.getName())) {
-                repository.saveReference(UUID.randomUUID().toString(),
-                    playerUuid,
-                    duplicateWaypoint.getUuid());
-            }
-
+            saveWaypointReference(playerWaypoints, duplicateWaypoint, player);
             MessageUtil.success(player, "New waypoint activated!");
+        }
+    }
+
+    private void saveWaypointReference(final List<Waypoint> playerWaypoints,
+                                       final Waypoint duplicateWaypoint,
+                                       final Player player) throws DatabaseException {
+        if (!ValidatorUtil.isActivatedForPlayer(plugin, playerWaypoints, duplicateWaypoint.getName())) {
+            repository.saveReference(UUID.randomUUID().toString(),
+                player.getUniqueId().toString(),
+                duplicateWaypoint.getUuid());
+            MessageUtil.success(player, "New waypoint activated!");
+        } else {
+            MessageUtil.fail(player, "Waypoint already activated!");
         }
     }
 }
