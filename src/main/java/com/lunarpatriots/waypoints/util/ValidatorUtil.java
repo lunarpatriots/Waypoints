@@ -27,7 +27,7 @@ public final class ValidatorUtil {
      */
     public static boolean isValidWaypointBlock(final Block targetBlock) {
         return Optional.ofNullable(targetBlock).isPresent()
-            && Tag.SIGNS.isTagged(targetBlock.getType())
+            && Tag.STANDING_SIGNS.isTagged(targetBlock.getType())
             && Constants.WAYPOINT_PREFIX.equals(((Sign) targetBlock.getState()).getLine(0))
             && StringUtils.isNotBlank(((Sign) targetBlock.getState()).getLine(1));
     }
