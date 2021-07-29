@@ -68,10 +68,29 @@ public final class WaypointRepositoryImpl implements WaypointRepository {
     }
 
     @Override
-    public List<Waypoint> filterWaypointsPerPlayer(final String userUuid, final String world) throws DatabaseException {
+    public List<Waypoint> filterWaypointsPerPlayerPerWorld(final String userUuid,
+                                                           final String world) throws DatabaseException {
         try (Connection connection = SqlUtil.getConnection(plugin);
              PreparedStatement preparedStatement = SqlUtil
-                 .buildPreparedStatement(connection, SqlConstants.GET_FILTERERD_PER_PLAYER_QUERY, userUuid, world);
+                 .buildPreparedStatement(
+                     connection,
+                     SqlConstants.GET_FILTERED_PER_PLAYER_PER_WORLD_QUERY,
+                     userUuid,
+                     world);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            return SqlUtil.readResult(resultSet);
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public List<Waypoint> filterWaypointsPerPlayer(final String userUuid) throws DatabaseException {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
+                .buildPreparedStatement(connection, SqlConstants.GET_FILTERED_PER_PLAYER_QUERY, userUuid);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             return SqlUtil.readResult(resultSet);
@@ -138,6 +157,20 @@ public final class WaypointRepositoryImpl implements WaypointRepository {
                      uuid)) {
 
             return preparedStatement.executeUpdate();
+        } catch (final SQLException ex) {
+            LogUtil.error("SQL Error: " + ex.getErrorCode());
+            throw new DatabaseException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public List<Waypoint> getWaypoint(final String waypointName) throws DatabaseException {
+        try (Connection connection = SqlUtil.getConnection(plugin);
+             PreparedStatement preparedStatement = SqlUtil
+                 .buildPreparedStatement(connection, SqlConstants.GET_WAYPOINT, waypointName);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            return SqlUtil.readResult(resultSet);
         } catch (final SQLException ex) {
             LogUtil.error("SQL Error: " + ex.getErrorCode());
             throw new DatabaseException(ex.getMessage(), ex);

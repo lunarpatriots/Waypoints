@@ -64,7 +64,7 @@ public final class ActivateWaypointListener implements Listener {
 
             final List<Waypoint> playerWaypoints = ValidatorUtil.isGlobalEnabled(plugin)
                 ? null
-                : repository.filterWaypointsPerPlayer(player.getUniqueId().toString(),
+                : repository.filterWaypointsPerPlayerPerWorld(player.getUniqueId().toString(),
                 player.getWorld().getName());
 
             if (duplicate.isPresent()) {

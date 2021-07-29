@@ -5,6 +5,7 @@ import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.repository.WaypointRepository;
 import com.lunarpatriots.waypoints.api.repository.impl.WaypointRepositoryImpl;
 import com.lunarpatriots.waypoints.commands.CleanCommand;
+import com.lunarpatriots.waypoints.commands.GiveCommand;
 import com.lunarpatriots.waypoints.commands.ImportCommand;
 import com.lunarpatriots.waypoints.commands.ValidateCommand;
 import com.lunarpatriots.waypoints.commands.WaypointsCommand;
@@ -107,6 +108,7 @@ public final class MainApp extends JavaPlugin {
         initCommand(this.getCommand("clean"), new CleanCommand(repository));
         initCommand(this.getCommand("import"), new ImportCommand(this, repository));
         initCommand(this.getCommand("waypoints"), new WaypointsCommand(repository));
+        initCommand(this.getCommand("giveWaypoint"), new GiveCommand(repository));
     }
 
     private void initCommand(final PluginCommand command, final CommandExecutor executor) {

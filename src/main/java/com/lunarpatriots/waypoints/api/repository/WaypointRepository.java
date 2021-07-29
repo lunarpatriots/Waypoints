@@ -17,7 +17,9 @@ public interface WaypointRepository {
 
     List<Waypoint> filterWaypoints(String world) throws DatabaseException;
 
-    List<Waypoint> filterWaypointsPerPlayer(String userUuid, String world) throws DatabaseException;
+    List<Waypoint> filterWaypointsPerPlayerPerWorld(String userUuid, String world) throws DatabaseException;
+
+    List<Waypoint> filterWaypointsPerPlayer(String userUuid) throws DatabaseException;
 
     int saveWaypoint(Waypoint waypoint) throws DatabaseException;
 
@@ -26,4 +28,6 @@ public interface WaypointRepository {
     int updateWaypoint(Waypoint waypoint) throws DatabaseException;
 
     int deleteWaypoint(String uuid) throws DatabaseException;
+
+    List<Waypoint> getWaypoint(String waypointName) throws DatabaseException;
 }
