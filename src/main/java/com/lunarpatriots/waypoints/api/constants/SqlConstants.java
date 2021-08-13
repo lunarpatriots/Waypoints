@@ -6,9 +6,9 @@ package com.lunarpatriots.waypoints.api.constants;
  */
 public final class SqlConstants {
 
-    public static final String JDBC_DRIVER_CLASS_NAME = "org.sqlite.JDBC";
+    public static final String JDBC_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
 
-    public static final String URL = "jdbc:sqlite:%s";
+    public static final String URL = "jdbc:mysql://%s:%s/%s";
 
     public static final String CREATE_WAYPOINTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS waypoints ("
         + "uuid VARCHAR(255) NOT NULL, "
@@ -41,12 +41,20 @@ public final class SqlConstants {
 
     public static final String GET_FILTERED_QUERY = "SELECT * FROM waypoints WHERE world = ?";
 
-    public static final String GET_FILTERERD_PER_PLAYER_QUERY = "SELECT "
+    public static final String GET_WAYPOINT = "SELECT * FROM waypoints WHERE name = ?";
+
+    public static final String GET_FILTERED_PER_PLAYER_PER_WORLD_QUERY = "SELECT "
         + "w.uuid, w.name, w.world, w.x_coordinate, w.y_coordinate, w.z_coordinate "
         + "FROM users u "
         + "LEFT JOIN waypoints w ON u.waypoints_uuid = w.uuid "
         + "WHERE u.user_uuid = ? "
-        + "AND w.world = ?";
+        + "AND w.world = ?;";
+
+    public static final String GET_FILTERED_PER_PLAYER_QUERY = "SELECT "
+        + "w.uuid, w.name, w.world, w.x_coordinate, w.y_coordinate, w.z_coordinate "
+        + "FROM users u "
+        + "LEFT JOIN waypoints w ON u.waypoints_uuid = w.uuid "
+        + "WHERE u.user_uuid = ?;";
 
     private SqlConstants() {
     }

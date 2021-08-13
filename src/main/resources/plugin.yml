@@ -17,3 +17,6 @@ commands:
   import:
     description: Import info from json file
     usage: /import <json file>
+  giveWaypoint:
+    description: Activates a waypoint for player
+    usage: /giveWaypoint <Player> <waypoint name>
