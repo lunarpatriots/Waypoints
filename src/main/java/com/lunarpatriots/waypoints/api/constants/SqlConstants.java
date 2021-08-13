@@ -6,9 +6,9 @@ package com.lunarpatriots.waypoints.api.constants;
  */
 public final class SqlConstants {
 
-    public static final String JDBC_DRIVER_CLASS_NAME = "org.sqlite.JDBC";
+    public static final String JDBC_DRIVER_CLASS_NAME = "com.mysql.cj.jdbc.Driver";
 
-    public static final String URL = "jdbc:sqlite:%s";
+    public static final String URL = "jdbc:mysql://%s:%s/%s";
 
     public static final String CREATE_WAYPOINTS_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS waypoints ("
         + "uuid VARCHAR(255) NOT NULL, "

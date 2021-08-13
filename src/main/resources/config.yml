@@ -9,3 +9,9 @@ distance: 500
 
 # This refers to if activated waypoints are available to all players or to whoever activated it only
 global-waypoints: false
+
+host: localhost
+port: 3306
+database: minecraft
+username: root
+password: password

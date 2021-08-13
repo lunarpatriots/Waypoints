@@ -4,11 +4,9 @@ import com.lunarpatriots.waypoints.MainApp;
 import com.lunarpatriots.waypoints.api.constants.SqlConstants;
 import com.lunarpatriots.waypoints.api.exceptions.DatabaseException;
 import com.lunarpatriots.waypoints.api.model.Waypoint;
-import com.lunarpatriots.waypoints.exceptions.DataFileException;
-import com.lunarpatriots.waypoints.util.DataFileUtil;
+import com.lunarpatriots.waypoints.util.ConfigUtil;
 import com.lunarpatriots.waypoints.util.LogUtil;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -36,13 +34,15 @@ public final class SqlUtil {
     public static Connection getConnection(final MainApp plugin) throws DatabaseException {
         try {
             Class.forName(SqlConstants.JDBC_DRIVER_CLASS_NAME);
-            final String filename = "waypoints.db";
-            final File dbFile = DataFileUtil.getDataFile(plugin, filename);
+            final String host = ConfigUtil.getString(plugin, "host", "");
+            final String port = ConfigUtil.getString(plugin, "port", "");
+            final String database = ConfigUtil.getString(plugin, "database", "");
+            final String username = ConfigUtil.getString(plugin, "username", "");
+            final String password = ConfigUtil.getString(plugin, "password", "");
 
-            return DriverManager.getConnection(String.format(SqlConstants.URL, dbFile));
-        } catch (final DataFileException ex) {
-            LogUtil.error(ex.getMessage());
-            throw new DatabaseException("Database file not found!", ex);
+            final String url = String.format(SqlConstants.URL, host, port, database);
+
+            return DriverManager.getConnection(url, username, password);
         } catch (final ClassNotFoundException ex) {
             LogUtil.error(ex.getMessage());
             throw new DatabaseException("Database driver not found!", ex);

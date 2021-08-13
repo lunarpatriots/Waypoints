@@ -84,7 +84,6 @@ public final class GiveCommand implements TabExecutor {
                                       final String waypointName,
                                       final String waypointUuid) {
         try {
-            LogUtil.info(playerUuid);
             final List<Waypoint> playerWaypoints = repository.filterWaypointsPerPlayer(playerUuid);
             final boolean isActive = playerWaypoints
                 .stream()
