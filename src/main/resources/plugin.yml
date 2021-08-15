@@ -19,4 +19,4 @@ commands:
     usage: /import <json file>
   giveWaypoint:
     description: Activates a waypoint for player
-    usage: /giveWaypoint <Player> <waypoint name>
+    usage: /givewaypoint <Player> <waypoint name>
