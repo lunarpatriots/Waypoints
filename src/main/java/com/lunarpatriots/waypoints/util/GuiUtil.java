@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -36,10 +37,13 @@ public final class GuiUtil {
             player,
             inventorySize,
             ChatColor.DARK_GREEN + Constants.GUI_TITLE);
-        waypoints.forEach(waypoint -> {
-            final ItemStack selection = createWaypointSelection(waypoint, player, plugin);
-            selectionGui.addItem(selection);
-        });
+
+        waypoints.stream()
+            .sorted(Comparator.comparing(Waypoint::getName))
+            .forEach(waypoint -> {
+                final ItemStack selection = createWaypointSelection(waypoint, player, plugin);
+                selectionGui.addItem(selection);
+            });
 
         return selectionGui;
     }
